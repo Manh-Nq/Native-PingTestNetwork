@@ -5,7 +5,6 @@ import com.tapi.speedtest.`object`.ICMPReply
 import com.tapi.internetprotocoldemo.`object`.ICMPStatistics
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.*
 
 const val REQUEST_TIME_OUT = "Request timed out"
 const val COUNT_REQUEST = 4
@@ -71,7 +70,7 @@ class Terminal {
     private fun parseICMPPackets(str: String, isRequest: Boolean): ICMPReply {
         val icmpPacket = ICMPReply()
         if (str.isNotEmpty())
-            icmpPacket.timeToLive = (str.split("ttl=")[1].split(" ")[0])
+            icmpPacket.ttl = (str.split("ttl=")[1].split(" ")[0])
         icmpPacket.time = (str.split("time=")[1].split(" ")[0])
         icmpPacket.bytes = str.substring(0, str.indexOf(" "))
         icmpPacket.isRequest = isRequest

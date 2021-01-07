@@ -1,12 +1,12 @@
 package com.tapi.speedtest.`object`
 
 class ICMPReply(
-    var timeToLive: String = "",
+    var ttl: String = "",
     var time: String = "",
     var bytes: String = "",
     var isRequest: Boolean = false
 ) {
     override fun toString(): String {
-        return " ttl: $timeToLive time:$time bytes : $bytes - $isRequest"
+        return " ttl: $ttl time:$time bytes : $bytes - $isRequest"
     }
 }

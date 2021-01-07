@@ -4,11 +4,11 @@ import android.util.Log
 import com.tapi.speedtest.`object`.ICMPReply
 
 class ICMPStatistics(
-    var listICMPRequest: List<ICMPReply>,
-    var destination: String
+    var listICMPRequest: List<ICMPReply> = ArrayList(),
+    var destination: String = "", var currentTime: Long = 0L
 ) {
 
-    private fun filterList() {
+    fun filterRatio(): Int {
         var received = 0
         var lost = 0
         for (icmpReply in listICMPRequest) {
@@ -19,11 +19,11 @@ class ICMPStatistics(
                 lost++
             }
         }
-        val ratio = (lost / listICMPRequest.size) * 100
+        return (lost / listICMPRequest.size) * 100
     }
 
 
-    private fun calculateMaxTime(): Double {
+    fun calculateMaxTime(): Double {
         var maxTime = listICMPRequest[0].time.toDouble()
         if (listICMPRequest.isNotEmpty()) {
             for (icmpReply in listICMPRequest) {
@@ -36,7 +36,7 @@ class ICMPStatistics(
         return 0.0
     }
 
-    private fun calculateMinTime(): Double {
+    fun calculateMinTime(): Double {
         var minTime = listICMPRequest[0].time.toDouble()
         if (listICMPRequest.isNotEmpty()) {
             for (icmpReply in listICMPRequest) {
@@ -51,11 +51,15 @@ class ICMPStatistics(
     }
 
 
-    private fun calculateAverage(): Int {
+    fun calculateAverage(): Int {
         if (listICMPRequest.isNotEmpty()) {
             var d = 0.0
             for (item in listICMPRequest) {
-                d += item.time.toDouble()
+                if (item.isRequest) {
+                    d += item.time.toDouble()
+                } else {
+                    d += (item.ttl.toDouble()) * 1000
+                }
             }
             val size = listICMPRequest.size.toDouble()
             return (d / size).toInt()
