@@ -14,14 +14,9 @@ class CMDManager {
         listIP.map {
             listICMP.add(terminal.ping(it))
         }
-        listICMP.forEach {
-            Log.d(
-                "TAG",
-                "ICMPPackets filterIPPerfect: ${it.host}  - average ${it.average}ms  - lost ${it.lost}"
-            )
-        }
 
-        return listICMP[0].host
+
+        return listICMP[0].destination
 
     }
 
