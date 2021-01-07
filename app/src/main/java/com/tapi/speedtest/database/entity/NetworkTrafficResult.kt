@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "ICMPTable")
-class ICMPEntity {
+class NetworkTrafficResult {
 
     @PrimaryKey
     @ColumnInfo(name = "destination")
@@ -15,13 +15,13 @@ class ICMPEntity {
     var host: String = ""
 
 
-    @ColumnInfo(name = "timeAverage")
-    var timeAverage: Int = 0
+    @ColumnInfo(name = "duration")
+    var duration: Int = 0
 
-    @ColumnInfo(name = "timeScanned")
-    var timeScanned: Long = 0L
+    @ColumnInfo(name = "validateThreshold")
+    var validateThreshold: Long = 0L
 
     override fun toString(): String {
-        return "destination : $destination  host : $host  timeAverage: $timeAverage ms timeScanned :$timeScanned ms "
+        return "destination : $destination  host : $host  duration: $duration ms validateThreshold :$validateThreshold ms "
     }
 }

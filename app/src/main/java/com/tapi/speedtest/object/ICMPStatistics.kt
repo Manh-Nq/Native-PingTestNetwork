@@ -2,24 +2,26 @@ package com.tapi.internetprotocoldemo.`object`
 
 import android.util.Log
 import com.tapi.speedtest.`object`.ICMPReply
+import com.tapi.speedtest.`object`.StatisticsParameters
 
 class ICMPStatistics(
     var listICMPRequest: List<ICMPReply> = ArrayList(),
     var destination: String = "", var currentTime: Long = 0L
 ) {
 
-    fun filterRatio(): Int {
+    fun filterRatio(): StatisticsParameters {
         var received = 0
         var lost = 0
         for (icmpReply in listICMPRequest) {
-            Log.d("TAG", "ICMPPackets :  filterList: ${icmpReply.toString()}")
+            Log.d("TAG", "ICMPPackets :  filterList: $icmpReply")
             if (icmpReply.isRequest) {
                 received++
             } else {
                 lost++
             }
         }
-        return (lost / listICMPRequest.size) * 100
+        val ratio = (lost / listICMPRequest.size) * 100
+        return StatisticsParameters(listICMPRequest.size, received, lost, ratio)
     }
 
 
