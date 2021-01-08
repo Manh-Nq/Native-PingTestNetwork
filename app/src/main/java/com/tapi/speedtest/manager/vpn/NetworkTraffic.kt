@@ -29,9 +29,6 @@ class NetworkTraffic {
 
     suspend fun mesure(dest: IP): NetworkTrafficResult {
         val item = terminal.ping(dest.address)
-   /*     item.listICMPRequest.forEach {
-            Log.d("TAG", "NManhhh: $it")
-        }*/
         return NetworkTrafficResult(
             Utils.getIPAddress(true),
             item.destination,

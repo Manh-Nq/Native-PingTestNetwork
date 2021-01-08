@@ -13,16 +13,18 @@ class VPNServerChooser {
 
 
     suspend fun choose(listIP: List<IP>): IP {
-        var ipPerfect = IP()
+        val listRs = mutableListOf<NetworkTrafficEntity>()
         for (ip in listIP) {
             val itemNetworkTraffic = vpnCacher.getIPOrNull(Utils.getIPAddress(true), ip.address)
-            ipPerfect = if (itemNetworkTraffic == null) {
+            if (itemNetworkTraffic == null) {
                 scanAllSaveToDB(ip)
+                choose(listIP)
             } else {
-                ip
+                listRs.add(itemNetworkTraffic)
             }
         }
-        return ipPerfect
+        listRs.sortBy { it.duration }
+        return Utils.convertIP(listRs[0].destination)
 
     }
 

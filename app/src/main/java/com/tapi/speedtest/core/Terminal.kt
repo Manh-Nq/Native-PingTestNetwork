@@ -52,7 +52,6 @@ class Terminal {
                     }
                 }
                 executeCmd.destroy()
-
                 icmpReply = if (result.contains("time=")) {
                     parseICMPPackets(result, isRequest)
                 } else {
@@ -84,6 +83,11 @@ class Terminal {
             listICMP.add(pingCMD(ip))
             index++
         }
+        val item = ICMPStatistics(listICMP, ip, System.currentTimeMillis())
+        item.listICMPRequest.forEach {
+            Log.d("TAG", "NManhhh: $it")
+        }
+        Log.d("TAG", "NManhhh: ${item.calculateAverage()} - host ${item.destination}")
         return ICMPStatistics(listICMP, ip, System.currentTimeMillis())
     }
 

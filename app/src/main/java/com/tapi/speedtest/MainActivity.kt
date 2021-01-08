@@ -72,7 +72,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         btGet.setOnClickListener {
-
+myScope.launch {
+    vpnChooser.deleteAll()
+}
         }
         btPing.setOnClickListener {
             tvRs.text = ""
@@ -98,8 +100,6 @@ class MainActivity : AppCompatActivity() {
             myScope.launch {
 
                 val rs = Utils.getIPAddress(true)
-
-                Log.d("TAG", "NManhhh: $rs")
             }
         }
 
