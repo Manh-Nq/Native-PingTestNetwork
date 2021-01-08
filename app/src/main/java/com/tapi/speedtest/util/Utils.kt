@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.ConnectivityManager
 import com.tapi.speedtest.MyApp
 import com.tapi.speedtest.`object`.IP
+import com.tapi.speedtest.`object`.NetworkTrafficResult
+import com.tapi.speedtest.database.entity.NetworkTrafficEntity
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.util.*
@@ -60,6 +62,15 @@ object Utils {
         } catch (ex: Exception) {
         } // for now eat exceptions
         return ""
+    }
+
+    fun parseNetworkTrafficEntity(networkTrafficResult: NetworkTrafficResult): NetworkTrafficEntity {
+        val networkTrafficEntity = NetworkTrafficEntity()
+        networkTrafficEntity.destination = networkTrafficResult.dest
+        networkTrafficEntity.host = networkTrafficResult.host
+        networkTrafficEntity.duration = networkTrafficResult.duration
+        networkTrafficEntity.validateThreshold = System.currentTimeMillis()
+        return networkTrafficEntity
     }
 
 }

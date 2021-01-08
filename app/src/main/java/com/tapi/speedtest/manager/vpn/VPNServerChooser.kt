@@ -17,7 +17,7 @@ class VPNServerChooser {
         for (ip in listIP) {
             val itemNetworkTraffic = vpnCacher.getIPOrNull(Utils.getIPAddress(true), ip.address)
             if (itemNetworkTraffic == null) {
-                scanAllSaveToDB(ip)
+                scanAndSaveToDB(ip)
                 choose(listIP)
             } else {
                 listRs.add(itemNetworkTraffic)
@@ -32,15 +32,9 @@ class VPNServerChooser {
         vpnCacher.deleteAll()
     }
 
-    private suspend fun scanAllSaveToDB(ip: IP): IP {
+    private suspend fun scanAndSaveToDB(ip: IP) {
         val networkTrafficResult = networkTraffic.mesure(ip)
-        val networkTrafficEntity = NetworkTrafficEntity()
-        networkTrafficEntity.destination = networkTrafficResult.dest
-        networkTrafficEntity.host = networkTrafficResult.host
-        networkTrafficEntity.duration = networkTrafficResult.duration
-        networkTrafficEntity.validateThreshold = System.currentTimeMillis()
-        vpnCacher.saveResult(networkTrafficEntity)
-        return Utils.convertIP(networkTrafficEntity.destination)
+        val networkEntity = Utils.parseNetworkTrafficEntity(networkTrafficResult)
+        vpnCacher.saveResult(networkEntity)
     }
-
 }
