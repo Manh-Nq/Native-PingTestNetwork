@@ -25,10 +25,10 @@ object Utils {
         val isWifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)?.isConnectedOrConnecting
 
 
-        if (!is3g!! && !isWifi!!) {
-            return false
+        if ((is3g != null && is3g) || (isWifi != null && isWifi)) {
+            return true
         }
-        return true
+        return false
     }
 
 
