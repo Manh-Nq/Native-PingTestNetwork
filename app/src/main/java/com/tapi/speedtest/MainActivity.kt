@@ -79,10 +79,14 @@ class MainActivity : AppCompatActivity() {
             myScope.launch {
 
                 val rs = vpnChooser.choose(listIP)
-//                val rs = terminal.ping("1.1.1.1")
+
                 withContext(Dispatchers.Main) {
                     showProgress(false)
-                    Log.d("TAG", "onCreate: ${rs.ip}")
+                    /*rs.listICMPRequest.forEach {
+                        Log.d("TAG", "NManhhh: ${it}")
+
+                    }*/
+                    Log.d("TAG", "NManhhh: ${rs.ip}")
                 }
             }
 
@@ -90,7 +94,9 @@ class MainActivity : AppCompatActivity() {
 
 
         btPingIP.setOnClickListener {
-
+            myScope.launch {
+                vpnChooser.deleteAll()
+            }
         }
 
 

@@ -52,6 +52,7 @@ class Terminal {
                     }
                 }
                 executeCmd.destroy()
+
                 icmpReply = if (result.contains("time=")) {
                     parseICMPPackets(result, isRequest)
                 } else {

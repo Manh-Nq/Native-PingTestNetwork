@@ -24,4 +24,9 @@ class VPNCacher {
         return MyApp.terminalDB.terminalDAO.getAllICMP()
     }
 
+    suspend fun deleteAll() {
+        return MyApp.terminalDB.terminalDAO.deleteAllTable()
+    }
+
+
 }

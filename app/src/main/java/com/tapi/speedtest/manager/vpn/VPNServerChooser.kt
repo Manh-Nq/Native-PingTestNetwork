@@ -26,6 +26,10 @@ class VPNServerChooser {
 
     }
 
+    suspend fun deleteAll() {
+        vpnCacher.deleteAll()
+    }
+
     private suspend fun scanAllSaveToDB(ip: IP): IP {
         val networkTrafficResult = networkTraffic.mesure(ip)
         val networkTrafficEntity = NetworkTrafficEntity()
