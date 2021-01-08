@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var vpnChooser: VPNServerChooser
     lateinit var terminal: Terminal
     val tmp = mutableListOf(
-        "gooogle.com", "facebook.com", "youtube.com", "vlxx.com"
+        "gooogle.com", "facebook.com", "youtube.com", "vlxx.com","1.1.1.1","8.8.8.8", "8.8.4.4"
     )
     val listIP = mutableListOf<IP>()
     val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -72,9 +72,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         btGet.setOnClickListener {
-myScope.launch {
-    vpnChooser.deleteAll()
-}
+            myScope.launch {
+                vpnChooser.deleteAll()
+            }
         }
         btPing.setOnClickListener {
             tvRs.text = ""
@@ -85,10 +85,6 @@ myScope.launch {
 
                 withContext(Dispatchers.Main) {
                     showProgress(false)
-                    /*rs.listICMPRequest.forEach {
-                        Log.d("TAG", "NManhhh: ${it}")
-
-                    }*/
                     Log.d("TAG", "NManhhh: ${rs.address}")
                 }
             }
@@ -100,6 +96,7 @@ myScope.launch {
             myScope.launch {
 
                 val rs = Utils.getIPAddress(true)
+                Log.d("TAG", "NManhhh: $rs")
             }
         }
 

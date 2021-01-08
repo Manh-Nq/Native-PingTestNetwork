@@ -84,9 +84,6 @@ class Terminal {
             index++
         }
         val item = ICMPStatistics(listICMP, ip, System.currentTimeMillis())
-        item.listICMPRequest.forEach {
-            Log.d("TAG", "NManhhh: $it")
-        }
         Log.d("TAG", "NManhhh: ${item.calculateAverage()} - host ${item.destination}")
         return ICMPStatistics(listICMP, ip, System.currentTimeMillis())
     }

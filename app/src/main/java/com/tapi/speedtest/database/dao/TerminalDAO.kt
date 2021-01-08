@@ -4,19 +4,17 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.tapi.speedtest.`object`.Constance
 import com.tapi.speedtest.database.entity.NetworkTrafficEntity
 
 @Dao
 interface TerminalDAO {
-    companion object {
-        const val TIME_VALID = 30 * 60 * 1000
-    }
 
     @Query("select * from ICMPTable")
     suspend fun getAllICMP(): List<NetworkTrafficEntity>
 
 
-    @Query("select * from ICMPTable where host = :host and destination =:dest and (:time-validateThreshold) < $TIME_VALID")
+    @Query("select * from ICMPTable where host = :host and destination =:dest and (:time-validateThreshold) < ${Constance.TIME_CONFIG}")
     suspend fun getOrNull(host: String, dest: String, time: Long): NetworkTrafficEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
