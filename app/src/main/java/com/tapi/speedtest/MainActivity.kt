@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.core.Terminal
 import com.tapi.speedtest.manager.vpn.VPNServerChooser
+import com.tapi.speedtest.util.Utils
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                         Log.d("TAG", "NManhhh: ${it}")
 
                     }*/
-                    Log.d("TAG", "NManhhh: ${rs.ip}")
+                    Log.d("TAG", "NManhhh: ${rs.address}")
                 }
             }
 
@@ -95,7 +96,10 @@ class MainActivity : AppCompatActivity() {
 
         btPingIP.setOnClickListener {
             myScope.launch {
-                vpnChooser.deleteAll()
+
+                val rs = Utils.getIPAddress(true)
+
+                Log.d("TAG", "NManhhh: $rs")
             }
         }
 

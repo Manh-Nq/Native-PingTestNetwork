@@ -21,8 +21,10 @@ interface TerminalDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveResult(icmpEntity: NetworkTrafficEntity)
+
     @Query("delete from ICMPTable")
     suspend fun deleteAllTable()
+
     /*@Delete
     suspend fun deleteICMP(icmpEntity: NetworkTrafficResult)
 

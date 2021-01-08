@@ -15,7 +15,7 @@ class VPNServerChooser {
     suspend fun choose(listIP: List<IP>): IP {
         var ipPerfect = IP()
         for (ip in listIP) {
-            val itemNetworkTraffic = vpnCacher.getIPOrNull("1.1.1.1", ip.ip)
+            val itemNetworkTraffic = vpnCacher.getIPOrNull(Utils.getIPAddress(true), ip.address)
             ipPerfect = if (itemNetworkTraffic == null) {
                 scanAllSaveToDB(ip)
             } else {

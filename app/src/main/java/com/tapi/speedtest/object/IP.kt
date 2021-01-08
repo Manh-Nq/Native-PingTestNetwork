@@ -1,4 +1,4 @@
 package com.tapi.speedtest.`object`
 
-class IP(var ip: String = "", var domain: String = "") {
+class IP(var address: String = "", var domain: String = "") {
 }
