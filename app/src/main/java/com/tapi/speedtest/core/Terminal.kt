@@ -21,14 +21,15 @@ class Terminal {
             var i = 0
             val executeCmd: Process? = executeCmd("$PING_CMD$str", false)
             executeCmd?.let {
-                val bufferedReader = BufferedReader(InputStreamReader(executeCmd.inputStream))
-                val bufferedReader2 = BufferedReader(InputStreamReader(executeCmd.errorStream))
+                val bufferedReaderSuccess =
+                    BufferedReader(InputStreamReader(executeCmd.inputStream))
+                val bufferedReaderErr = BufferedReader(InputStreamReader(executeCmd.errorStream))
                 val waitFor = executeCmd.waitFor()
                 if (waitFor != 0) {
                     if (waitFor != 1) {
                         result = ""
                         while (true) {
-                            val readLine = bufferedReader2.readLine() ?: break
+                            val readLine = bufferedReaderErr.readLine() ?: break
                             result = "$result$readLine \n"
                             isRequest = false
                         }
@@ -38,7 +39,7 @@ class Terminal {
                     }
                 } else {
                     while (true) {
-                        val readLine2 = bufferedReader.readLine()
+                        val readLine2 = bufferedReaderSuccess.readLine()
                         if (readLine2 == null) {
                             result = ""
                             break

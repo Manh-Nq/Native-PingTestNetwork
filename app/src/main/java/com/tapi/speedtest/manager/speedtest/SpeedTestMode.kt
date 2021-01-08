@@ -1,4 +1,4 @@
-package com.tapi.speedtest.manager.cmd
+package com.tapi.speedtest.manager.speedtest
 
 /**
  * Speed examples mode.

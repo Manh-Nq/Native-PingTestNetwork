@@ -13,8 +13,7 @@ interface TerminalDAO {
     @Query("select * from ICMPTable")
     suspend fun getAllICMP(): List<NetworkTrafficEntity>
 
-
-    @Query("select * from ICMPTable where host = :host and destination =:dest and (:time-validateThreshold) < ${Constance.TIME_CONFIG}")
+    @Query("select * from ICMPTable where host= :host and destination =:dest and (:time-validateThreshold) < ${Constance.TIME_CONFIG}")
     suspend fun getOrNull(host: String, dest: String, time: Long): NetworkTrafficEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -22,6 +21,9 @@ interface TerminalDAO {
 
     @Query("delete from ICMPTable")
     suspend fun deleteAllTable()
+
+    @Query("select * FROM (select *, DATE('now')  - validateThreshold AS minus FROM ICMPTable )t WHERE t.host = :host AND t.minus < ${Constance.TIME_CONFIG} ORDER BY t.duration LIMIT 1")
+    suspend fun getIPPerfect(host: String): NetworkTrafficEntity?
 
     /*@Delete
     suspend fun deleteICMP(icmpEntity: NetworkTrafficResult)

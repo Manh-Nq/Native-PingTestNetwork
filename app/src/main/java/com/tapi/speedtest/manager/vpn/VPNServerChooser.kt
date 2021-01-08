@@ -1,6 +1,5 @@
 package com.tapi.speedtest.manager.vpn
 
-import android.util.Log
 import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.database.entity.NetworkTrafficEntity
 import com.tapi.speedtest.util.Utils
@@ -18,7 +17,6 @@ class VPNServerChooser {
         for (ip in listIP) {
             val itemNetworkTraffic = vpnCacher.getIPOrNull(Utils.getIPAddress(true), ip.address)
             if (itemNetworkTraffic == null) {
-                Log.d("TAG", "NManhhh: null")
                 scanAndSaveToDB(ip)
                 choose(listIP)
             } else {
@@ -34,11 +32,10 @@ class VPNServerChooser {
         vpnCacher.deleteAll()
     }
 
+
     private suspend fun scanAndSaveToDB(ip: IP) {
-        Log.d("TAG", "NManhhh: scanAndSaveToDB - start")
         val networkTrafficResult = networkTraffic.mesure(ip)
         val networkEntity = Utils.parseNetworkTrafficEntity(networkTrafficResult)
         vpnCacher.saveResult(networkEntity)
-        Log.d("TAG", "NManhhh: scanAndSaveToDB - end")
     }
 }

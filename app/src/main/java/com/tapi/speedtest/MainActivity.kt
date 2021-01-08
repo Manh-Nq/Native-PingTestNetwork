@@ -11,7 +11,6 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.core.Terminal
 import com.tapi.speedtest.manager.vpn.VPNServerChooser
 import com.tapi.speedtest.util.Utils
@@ -28,10 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btPermission: Button
     lateinit var vpnChooser: VPNServerChooser
     lateinit var terminal: Terminal
-    val tmp = mutableListOf(
-        "gooogle.com", "facebook.com", "youtube.com", "vlxx.com","1.1.1.1","8.8.8.8", "8.8.4.4"
-    )
-    val listIP = mutableListOf<IP>()
+
     val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
 
@@ -48,9 +44,7 @@ class MainActivity : AppCompatActivity() {
         btPermission = findViewById(R.id.bt_permission)
         vpnChooser = VPNServerChooser()
         terminal = Terminal()
-        tmp.map {
-            listIP.add(IP(it))
-        }
+
 
         btPermission.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
@@ -81,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             showProgress(true)
             myScope.launch {
 
-                val rs = vpnChooser.choose(listIP)
+                val rs = vpnChooser.choose(Utils.listServer())
 
                 withContext(Dispatchers.Main) {
                     showProgress(false)
@@ -97,6 +91,7 @@ class MainActivity : AppCompatActivity() {
 
                 val rs = Utils.getIPAddress(true)
                 Log.d("TAG", "NManhhh: $rs")
+
             }
         }
 

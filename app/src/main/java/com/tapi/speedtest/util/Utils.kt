@@ -13,6 +13,19 @@ import java.util.*
 
 object Utils {
 
+    val tmp = mutableListOf(
+        "gooogle.com", "facebook.com", "youtube.com", "vlxx.com", "1.1.1.1", "8.8.8.8", "8.8.4.4"
+    )
+
+    fun listServer(): List<IP> {
+        val listIP = mutableListOf<IP>()
+        tmp.map {
+            listIP.add(IP(it))
+        }
+        return listIP
+
+    }
+
 
     fun convertIP(ip: String): IP {
         return IP(ip)

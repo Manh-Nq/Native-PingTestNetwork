@@ -20,8 +20,8 @@ class VPNCacher {
     }
 
 
-    suspend fun getAllTable(): List<NetworkTrafficEntity> {
-        return MyApp.terminalDB.terminalDAO.getAllICMP()
+    suspend fun getItemperfect(host: String): NetworkTrafficEntity? {
+        return MyApp.terminalDB.terminalDAO.getIPPerfect(host)
     }
 
     suspend fun deleteAll() {
