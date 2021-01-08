@@ -1,19 +1,19 @@
 package com.tapi.speedtest.core
 
 import android.util.Log
-import com.tapi.speedtest.`object`.ICMPReply
 import com.tapi.internetprotocoldemo.`object`.ICMPStatistics
+import com.tapi.speedtest.`object`.ICMPReply
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 const val REQUEST_TIME_OUT = "Request timed out"
 const val COUNT_REQUEST = 4
 const val PING_CMD = "ping -c 1 -w 5 "
-
+const val TTL_DEFAULT = "120000"
 
 class Terminal {
 
-    fun pingCMD(str: String): ICMPReply {
+ private   fun pingCMD(str: String): ICMPReply {
         var icmpReply: ICMPReply
         var result: String
         try {
@@ -52,11 +52,10 @@ class Terminal {
                     }
                 }
                 executeCmd.destroy()
-                Log.d("TAG", "ICMPPackets:result $result")
                 icmpReply = if (result.contains("time=")) {
                     parseICMPPackets(result, isRequest)
                 } else {
-                    ICMPReply(isRequest = false)
+                    ICMPReply(ttl = TTL_DEFAULT, isRequest = false)
                 }
                 return icmpReply
             }
@@ -77,14 +76,14 @@ class Terminal {
         return icmpPacket
     }
 
-    fun ping(ip: String): ICMPStatistics {
+    fun  ping(ip: String): ICMPStatistics {
         var index = 0
         val listICMP = mutableListOf<ICMPReply>()
         while (index < COUNT_REQUEST) {
             listICMP.add(pingCMD(ip))
             index++
         }
-        return ICMPStatistics(listICMP, ip)
+        return ICMPStatistics(listICMP, ip, System.currentTimeMillis())
     }
 
 

@@ -1,59 +1,40 @@
 package com.tapi.speedtest.manager.vpn
 
-import com.tapi.speedtest.`object`.Constance
 import com.tapi.speedtest.`object`.IP
-import com.tapi.speedtest.database.entity.NetworkTrafficResult
+import com.tapi.speedtest.database.entity.NetworkTrafficEntity
 import com.tapi.speedtest.util.Utils
 
 class VPNServerChooser {
+
     companion object {
         val vpnCacher = VPNCacher()
+        val networkTraffic = NetworkTraffic()
     }
 
 
     suspend fun choose(listIP: List<IP>): IP {
-        val listICMP = vpnCacher.getAllTable()
-        var ipPerfect = listICMP[0]
-
-        listICMP.forEach {
-            if (it.validateThreshold < ipPerfect.validateThreshold) {
-                ipPerfect = it
+        var ipPerfect = IP()
+        for (ip in listIP) {
+            val itemNetworkTraffic = vpnCacher.getIPOrNull("1.1.1.1", ip.ip)
+            ipPerfect = if (itemNetworkTraffic == null) {
+                scanAllSaveToDB(ip)
+            } else {
+                ip
             }
         }
-        if (listIP.contains(ipPerfect.destination) && (System.currentTimeMillis() - ipPerfect.validateThreshold) <= Constance.TIME_CONFIG) {
-            return Utils.convertIP(ipPerfect.destination)
-        } else {
-            scanAndFilterList(listIP)
-        }
-        return IP()
+        return ipPerfect
+
     }
 
-
-    private suspend fun scanAndFilterList(listIP: List<IP>) {
-        val rs = scanAllIP(listIP)
-        if (rs) {
-            choose(listIP)
-        }
+    private suspend fun scanAllSaveToDB(ip: IP): IP {
+        val networkTrafficResult = networkTraffic.mesure(ip)
+        val networkTrafficEntity = NetworkTrafficEntity()
+        networkTrafficEntity.destination = networkTrafficResult.dest
+        networkTrafficEntity.host = networkTrafficResult.host
+        networkTrafficEntity.duration = networkTrafficResult.duration
+        networkTrafficEntity.validateThreshold = System.currentTimeMillis()
+        vpnCacher.saveResult(networkTrafficEntity)
+        return Utils.convertIP(networkTrafficEntity.destination)
     }
-
-    suspend fun scanAllIP(listIP: List<IP>): Boolean {
-        try {
-            listIP.map {
-                val itemICMP = NetworkTraffic.terminal.ping(it.ip)
-                val icmpEntity = NetworkTrafficResult()
-                icmpEntity.destination = itemICMP.destination
-                icmpEntity.host = "1.1.1.1"
-                icmpEntity.duration = itemICMP.calculateAverage()
-                icmpEntity.validateThreshold = itemICMP.currentTime
-                vpnCacher.saveResult(icmpEntity)
-            }
-            return true
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return false
-    }
-
 
 }

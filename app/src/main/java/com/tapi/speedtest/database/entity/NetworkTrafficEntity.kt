@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "ICMPTable")
-class NetworkTrafficResult {
+class NetworkTrafficEntity {
 
     @PrimaryKey
     @ColumnInfo(name = "destination")
