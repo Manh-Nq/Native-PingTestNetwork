@@ -2,14 +2,12 @@ package com.tapi.speedtest.core
 
 import android.util.Log
 import com.tapi.internetprotocoldemo.`object`.ICMPStatistics
+import com.tapi.speedtest.`object`.Constance
 import com.tapi.speedtest.`object`.ICMPReply
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-const val REQUEST_TIME_OUT = "Request timed out"
-const val COUNT_REQUEST = 4
-const val PING_CMD = "ping -c 1 -w 5 "
-const val TTL_DEFAULT = "120000"
+
 
 class Terminal {
 
@@ -19,7 +17,7 @@ class Terminal {
         try {
             var isRequest = false
             var i = 0
-            val executeCmd: Process? = executeCmd("$PING_CMD$str", false)
+            val executeCmd: Process? = executeCmd("${Constance.PING_CMD}$str", false)
             executeCmd?.let {
                 val bufferedReaderSuccess =
                     BufferedReader(InputStreamReader(executeCmd.inputStream))
@@ -35,7 +33,7 @@ class Terminal {
                         }
                     } else {
                         icmpReply = ICMPReply(isRequest = false)
-                        result = "$REQUEST_TIME_OUT\n"
+                        result = "${Constance.REQUEST_TIME_OUT}\n"
                     }
                 } else {
                     while (true) {
@@ -53,10 +51,11 @@ class Terminal {
                     }
                 }
                 executeCmd.destroy()
+//                Log.d("TAG", "NManhhh: $result")
                 icmpReply = if (result.contains("time=")) {
                     parseICMPPackets(result, isRequest)
                 } else {
-                    ICMPReply(ttl = TTL_DEFAULT, isRequest = false)
+                    ICMPReply(ttl = Constance.TTL_DEFAULT, isRequest = false)
                 }
                 return icmpReply
             }
@@ -68,19 +67,19 @@ class Terminal {
 
 
     private fun parseICMPPackets(str: String, isRequest: Boolean): ICMPReply {
-        val icmpPacket = ICMPReply()
+        val icmpReply = ICMPReply()
         if (str.isNotEmpty())
-            icmpPacket.ttl = (str.split("ttl=")[1].split(" ")[0])
-        icmpPacket.time = (str.split("time=")[1].split(" ")[0])
-        icmpPacket.bytes = str.substring(0, str.indexOf(" "))
-        icmpPacket.isRequest = isRequest
-        return icmpPacket
+            icmpReply.ttl = (str.split("ttl=")[1].split(" ")[0])
+        icmpReply.time = (str.split("time=")[1].split(" ")[0])
+        icmpReply.bytes = str.substring(0, str.indexOf(" "))
+        icmpReply.isRequest = isRequest
+        return icmpReply
     }
 
     fun  ping(ip: String): ICMPStatistics {
         var index = 0
         val listICMP = mutableListOf<ICMPReply>()
-        while (index < COUNT_REQUEST) {
+        while (index < Constance.COUNT_REQUEST) {
             listICMP.add(pingCMD(ip))
             index++
         }

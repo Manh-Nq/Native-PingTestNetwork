@@ -1,96 +1,61 @@
 package com.tapi.speedtest
 
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import com.tapi.speedtest.`object`.Constance
 import com.tapi.speedtest.core.Terminal
+import com.tapi.speedtest.databinding.ActivityMainBinding
+import com.tapi.speedtest.manager.speedtest.NetworkEvent
 import com.tapi.speedtest.manager.vpn.VPNServerChooser
 import com.tapi.speedtest.util.Utils
+import fr.bmartel.speedtest.SpeedTestReport
+import fr.bmartel.speedtest.SpeedTestSocket
+import fr.bmartel.speedtest.model.SpeedTestError
 import kotlinx.coroutines.*
+import java.math.RoundingMode
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
 
-    private lateinit var btPing: Button
-    private lateinit var btPingIP: Button
-    private lateinit var btGet: Button
-    private lateinit var tvRs: TextView
-    private lateinit var edtIP: EditText
-    private lateinit var prg: ProgressBar
-    private lateinit var btPermission: Button
-    lateinit var vpnChooser: VPNServerChooser
-    lateinit var terminal: Terminal
-
+    lateinit var spt: SpeedTestSocket
+    lateinit var listUpload: MutableList<Double>
+    lateinit var networkEvent: NetworkEvent
     val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private lateinit var binding: ActivityMainBinding
 
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        btPing = findViewById(R.id.bt_ping)
-        btPingIP = findViewById(R.id.bt_ping_ip)
-        btGet = findViewById(R.id.bt_get)
-        tvRs = findViewById(R.id.tv_result)
-        edtIP = findViewById(R.id.edt_ip)
-        prg = findViewById(R.id.prg)
-        btPermission = findViewById(R.id.bt_permission)
-        vpnChooser = VPNServerChooser()
-        terminal = Terminal()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        listUpload = mutableListOf()
+
+        spt = SpeedTestSocket()
+        networkEvent = NetworkEvent(this)
+
+        spt.defaultRoundingMode = RoundingMode.HALF_EVEN
+        spt.addSpeedTestListener(networkEvent)
 
 
-        btPermission.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_NETWORK_STATE
-                ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.INTERNET
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermissions(
-                    arrayOf(
-                        Manifest.permission.ACCESS_NETWORK_STATE,
-                        Manifest.permission.INTERNET
-                    ), 100
-                )
-            }
-
-        }
-
-        btGet.setOnClickListener {
+        binding.btDownload.setOnClickListener {
             myScope.launch {
-                vpnChooser.deleteAll()
+                spt.startDownload(Constance.URI_SPEED_TEST_DOWNLOAD_1M)
+
             }
         }
-        btPing.setOnClickListener {
-            tvRs.text = ""
+
+        binding.btUpload.setOnClickListener {
             showProgress(true)
             myScope.launch {
-
-                val rs = vpnChooser.choose(Utils.listServer())
-
-                withContext(Dispatchers.Main) {
-                    showProgress(false)
-                    Log.d("TAG", "NManhhh: ${rs.address}")
-                }
-            }
-
-        }
-
-
-        btPingIP.setOnClickListener {
-            myScope.launch {
-
-                val rs = Utils.getIPAddress(true)
-                Log.d("TAG", "NManhhh: $rs")
+/*  val rs = Utils.getIPAddress(true)
+                Log.d("nmcode", "NManhhh: $rs")*/
+                spt.startUpload(Constance.URI_SPEED_TEST_UPLOAD, 1000000)
 
             }
         }
@@ -100,14 +65,38 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProgress(b: Boolean) {
         if (b) {
-            prg.visibility = View.VISIBLE
+            binding.prg.visibility = View.VISIBLE
         } else {
-            prg.visibility = View.INVISIBLE
+            binding.prg.visibility = View.INVISIBLE
         }
     }
 
     private fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccess(report: SpeedTestReport) {
+        super.onSuccess(report)
+        MainScope().launch {
+            showProgress(false)
+        }
+        Log.e("nmcode", "[SUCCESS]  RateBit: ${report.transferRateBit} octet/s")
+        Log.e(
+            "nmcode",
+            "[SUCCESS]  RateOctet: ${report.transferRateOctet} bit/s"
+        )
+    }
+
+    override fun onFail(speedTestError: SpeedTestError?, errorMessage: String) {
+        super.onFail(speedTestError, errorMessage)
+    }
+
+    override fun onRunning(percent: Float, report: SpeedTestReport) {
+        super.onRunning(percent, report)
+        binding.sbPercent.progress = percent.toInt()
+        Log.d("nmcode", "[RUNNING]  percent: ${percent}%")
+        Log.d("nmcode", "[RUNNING]  RateBit: ${report.transferRateBit} bit/s")
+        Log.d("nmcode", "[RUNNING]  RateOctet: ${report.transferRateOctet} ocTet/s")
     }
 
 }

@@ -1,6 +1,7 @@
 package com.tapi.speedtest.manager.vpn
 
 
+import android.util.Log
 import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.`object`.NetworkTrafficResult
 import com.tapi.speedtest.core.Terminal

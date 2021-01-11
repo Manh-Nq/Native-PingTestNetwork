@@ -13,14 +13,6 @@
             android:layout_centerInParent="true"
             android:visibility="invisible" />
 
-        <SeekBar
-            android:id="@+id/sb_percent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/bt_get"
-            android:layout_marginTop="20dp"
-            android:max="100" />
-
 
         <Button
             android:id="@+id/bt_ping"
@@ -28,22 +20,6 @@
             android:layout_height="50dp"
             android:text="Ping" />
 
-
-        <Button
-            android:id="@+id/bt_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="11dp"
-            android:layout_toRightOf="@+id/bt_ping"
-            android:text="Upload" />
-
-        <Button
-            android:id="@+id/bt_download"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/bt_upload"
-            android:text="download" />
 
         <Button
             android:id="@+id/bt_get"
@@ -57,7 +33,7 @@
             android:id="@+id/edt_ip"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@id/bt_download"
+            android:layout_below="@id/bt_ping"
             android:hint="1.1.1.1" />
 
 

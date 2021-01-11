@@ -2,6 +2,7 @@ package com.tapi.speedtest.util
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.Log
 import com.tapi.speedtest.MyApp
 import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.`object`.NetworkTrafficResult
@@ -75,6 +76,10 @@ object Utils {
         } catch (ex: Exception) {
         } // for now eat exceptions
         return ""
+    }
+
+    fun <T : Boolean> getBl(): T {
+        return false as T
     }
 
     fun parseNetworkTrafficEntity(networkTrafficResult: NetworkTrafficResult): NetworkTrafficEntity {
