@@ -9,11 +9,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.tapi.speedtest.`object`.Constance
-import com.tapi.speedtest.core.Terminal
 import com.tapi.speedtest.databinding.ActivityMainBinding
 import com.tapi.speedtest.manager.speedtest.NetworkEvent
-import com.tapi.speedtest.manager.vpn.VPNServerChooser
-import com.tapi.speedtest.util.Utils
 import fr.bmartel.speedtest.SpeedTestReport
 import fr.bmartel.speedtest.SpeedTestSocket
 import fr.bmartel.speedtest.model.SpeedTestError
@@ -56,7 +53,6 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
 /*  val rs = Utils.getIPAddress(true)
                 Log.d("nmcode", "NManhhh: $rs")*/
                 spt.startUpload(Constance.URI_SPEED_TEST_UPLOAD, 1000000)
-
             }
         }
 
@@ -81,10 +77,7 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
             showProgress(false)
         }
         Log.e("nmcode", "[SUCCESS]  RateBit: ${report.transferRateBit} octet/s")
-        Log.e(
-            "nmcode",
-            "[SUCCESS]  RateOctet: ${report.transferRateOctet} bit/s"
-        )
+        Log.e("nmcode", "[SUCCESS]  RateOctet: ${report.transferRateOctet} bit/s")
     }
 
     override fun onFail(speedTestError: SpeedTestError?, errorMessage: String) {
@@ -96,7 +89,12 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
         binding.sbPercent.progress = percent.toInt()
         Log.d("nmcode", "[RUNNING]  percent: ${percent}%")
         Log.d("nmcode", "[RUNNING]  RateBit: ${report.transferRateBit} bit/s")
-        Log.d("nmcode", "[RUNNING]  RateOctet: ${report.transferRateOctet} ocTet/s")
+        Log.d("nmcode", "[RUNNING]  RateOctet: ${report.transferRateOctet} L")
+        Log.d("nmcode", "[RUNNING]  reportTime: ${report.reportTime}Long")
+        Log.d("nmcode", "[RUNNING]  requestNum: ${report.requestNum} ")
+        Log.d("nmcode", "[RUNNING]  totalPacketSize: ${report.totalPacketSize} L")
+        Log.d("nmcode", "[RUNNING]  temporaryPacketSize: ${report.temporaryPacketSize} L")
+        Log.d("nmcode", "[RUNNING]  startTime: ${report.startTime} L")
     }
 
 }
