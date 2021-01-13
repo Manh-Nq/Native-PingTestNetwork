@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBlack">
+
+
+        <com.tapi.speedtest.speedview.view.PointerSpeedometer
+            android:id="@+id/sp_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:sv_backgroundCircleColor="@color/whitealpha"
+            app:sv_centerCircleColor="@color/colorBlueCenter"
+            app:sv_indicatorColor="@color/white"
+            app:sv_indicatorWidth="5dp"
+            app:sv_markColor="@color/colorBlue"
+            app:sv_pointerColor="@color/colorBlue"
+            app:sv_speedTextColor="@color/white"
+            app:sv_speedometerColor="@color/colorBlue"
+            app:sv_textColor="@color/white"
+            app:sv_unit="Mbps/s"
+            app:sv_unitTextColor="@color/white" />
+
+        <!--
+                <Button
+                    android:id="@+id/bt_go"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/sp_rate"
+                    android:layout_centerInParent="true"
+                    android:text="goto" />
+        -->
+    </RelativeLayout>
+</layout>

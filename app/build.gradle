@@ -53,7 +53,6 @@ dependencies {
     //noinspection GradleDependency
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-
     compile 'fr.bmartel:jspeedtest:1.32.1'
 
 
