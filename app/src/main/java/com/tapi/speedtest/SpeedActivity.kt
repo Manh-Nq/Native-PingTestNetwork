@@ -33,11 +33,17 @@ class SpeedActivity : AppCompatActivity() {
             }
         }
         binding.spRate.speedTo(100f)
+
         /*CoroutineScope(Dispatchers.Main).launch {
             while (true) {
                 binding.spRate.speedTo(random.nextInt().toFloat(),1000)
             }
         }*/
+
+        binding.btgo.setOnClickListener {
+            binding.spRate.maxSpeed = 1000f
+            binding.spRate.unit = "Mb/s"
+        }
     }
 
 

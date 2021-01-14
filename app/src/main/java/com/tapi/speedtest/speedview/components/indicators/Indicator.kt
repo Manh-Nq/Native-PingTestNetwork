@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import com.github.anastr.speedviewlib.components.indicators.*
-import com.tapi.speedtest.ui.speedparameter.speedview.view.Speedometer
+import com.tapi.speedtest.speedview.view.Speedometer
 import java.util.*
 
 /**
@@ -73,7 +73,7 @@ abstract class Indicator<out I : Indicator<I>>(context: Context) : Observable() 
         indicatorPaint.color = color
     }
 
-    abstract fun draw(canvas: Canvas, degree: Float)
+    abstract fun draw(resources: Context, canvas: Canvas, degree: Float)
 
     /**
      * called when size change or color, width.

@@ -5,11 +5,12 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.github.anastr.speedviewlib.components.Style
 import com.tapi.speedtest.R
 import com.tapi.speedtest.speedview.components.indicators.SpindleIndicator
 import com.tapi.speedtest.speedview.utils.getRoundAngle
-import com.tapi.speedtest.ui.speedparameter.speedview.view.Speedometer
+
 
 /**
  * this Library build By Anas Altair
@@ -22,6 +23,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
 ) : Speedometer(context, attrs, defStyleAttr) {
 
     private val mpaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val mpaint2: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val speedometerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val pointerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val pointerBackPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -132,7 +134,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
 
-        val risk = speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat()
+        val risk = speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat() - 20
         speedometerRect.set(risk, risk, size - risk, size - risk)
 
         updateRadial()
@@ -144,7 +146,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         speedometerPaint.shader = updateSweep()
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         initDraw()
@@ -165,53 +167,73 @@ open class PointerSpeedometer @JvmOverloads constructor(
             canvas.save()
             canvas.rotate(90 + degree, size * .5f, size * .5f)
             /**
-             * draw line border in Circle
+             * draw elevation in Circle on linespeed
              **/
-            canvas.drawCircle(
-                size * .5f,
-                speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat(),
-                speedometerWidth * .5f + dpTOpx(8f),
-                pointerBackPaint
-            )
+            /*  canvas.drawCircle(
+                  size * .5f,
+                  speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat(),
+                  speedometerWidth * .5f + dpTOpx(8f),
+                  pointerBackPaint
+              )*/
 
             /**
              * draw circle in lineborder
              **/
-            canvas.drawCircle(
-                size * .5f,
-                speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat(),
-                speedometerWidth * .5f + dpTOpx(1f),
-                pointerPaint
-            )
+            /*  canvas.drawCircle(
+                  size * .5f,
+                  speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat(),
+                  speedometerWidth * .5f + dpTOpx(1f),
+                  pointerPaint
+              )*/
 
             canvas.restore()
         }
-
         drawSpeedUnitText(canvas)
 
 
         val c = centerCircleColor
         circlePaint.color =
             Color.argb((Color.alpha(c) * .5f).toInt(), Color.red(c), Color.green(c), Color.blue(c))
+
         /**
          * draw circle elevation in center
          **/
-        canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius + dpTOpx(6f), circlePaint)
+        mpaint2.color = ContextCompat.getColor(context, R.color.colorCircleCenterBackround)
+        setColorArcPaint(context)
+        canvas.drawCircle(size * .5f, size * .5f, dpTOpx(65f), mpaint2)
         circlePaint.color = c
         /**
          * draw circle in center
          **/
         mpaint.color = Color.WHITE
+        drawIndicator(canvas)
         canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
         canvas.drawCircle(size * .5f, size * .5f, dpTOpx(8f), mpaint)
-        drawIndicator(canvas)
         drawNotes(canvas)
+    }
+
+    private fun setColorArcPaint(context: Context) {
+        val colors = arrayListOf<Int>()
+        colors.add(ContextCompat.getColor(context, R.color.colorCircleCenterBackround))
+        colors.add(0)
+        colors.add(ContextCompat.getColor(context, R.color.colorBlue))
+        val positions = FloatArray(3)
+        positions[0] = 0f
+        positions[1] = 0.2f
+        positions[2] = 0.6f
+        mpaint2.shader = SweepGradient(
+            100f,
+            100f,
+            colors.toIntArray(),
+            positions
+        )
+
+        mpaint2.style = Paint.Style.FILL
     }
 
     override fun updateBackgroundBitmap() {
         val c = createBackgroundBitmapCanvas()
         initDraw()
-
         drawMarks(c)
         Log.d("TAG", "updateBackgroundBitmap: $tickNumber")
         if (tickNumber > 0)
@@ -236,6 +258,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
             Color.green(speedometerColor),
             Color.blue(speedometerColor)
         )
+
         val color3 = Color.argb(
             70,
             Color.red(speedometerColor),
@@ -249,10 +272,17 @@ open class PointerSpeedometer @JvmOverloads constructor(
             Color.blue(speedometerColor)
         )
         val position = getOffsetSpeed() * (getEndDegree() - getStartDegree()) / 360f
+        val c = ContextCompat.getColor(context, R.color.colorLineSpeedMeterbackground)
         val sweepGradient = SweepGradient(
             size * .5f,
             size * .5f,
-            intArrayOf(startColor, color2, speedometerColor, color3, endColor, startColor),
+            intArrayOf(
+                startColor, color2,
+                speedometerColor,
+//                        color3, endColor,        
+                c, c,
+                startColor
+            ),
             floatArrayOf(0f, position * .5f, position, position, .99f, 1f)
         )
         val matrix = Matrix()

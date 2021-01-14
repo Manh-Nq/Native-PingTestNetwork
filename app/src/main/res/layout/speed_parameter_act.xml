@@ -14,25 +14,29 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             app:sv_backgroundCircleColor="@color/whitealpha"
-            app:sv_centerCircleColor="@color/colorBlueCenter"
-            app:sv_indicatorColor="@color/white"
+            app:sv_centerCircleColor="@color/colorGrayCircleSpeedview"
             app:sv_indicatorWidth="5dp"
-            app:sv_markColor="@color/colorBlue"
+            app:sv_speedometerWidth="20dp"
+            app:sv_markColor="@color/colorMarks"
+            app:sv_markWidth="1dp"
             app:sv_pointerColor="@color/colorBlue"
+            app:sv_marksPadding="50dp"
             app:sv_speedTextColor="@color/white"
-            app:sv_speedometerColor="@color/colorBlue"
+            app:sv_tickNumber="10"
+            app:sv_tickPadding="25dp"
+            app:sv_tickRotation="false"
+            app:sv_tickTextFormat="INTEGER"
+            app:sv_speedometerColor="@color/colorSpeedMeters"
             app:sv_textColor="@color/white"
             app:sv_unit="Mbps/s"
             app:sv_unitTextColor="@color/white" />
 
-        <!--
                 <Button
-                    android:id="@+id/bt_go"
+                    android:id="@+id/btgo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/sp_rate"
                     android:layout_centerInParent="true"
                     android:text="goto" />
-        -->
     </RelativeLayout>
 </layout>

@@ -12,4 +12,9 @@
     <color name="whitealpha">#00FCFCFC</color>
     <color name="blueAlphaBorder">#003A90A0</color>
     <color name="colorBlack">#121627</color>
+    <color name="colorGrayCircleSpeedview">#686867</color>
+    <color name="colorCircleCenterBackround">#243457</color>
+    <color name="colorMarks">#ACA5A5</color>
+    <color name="colorSpeedMeters">#08A7AE</color>
+    <color name="colorLineSpeedMeterbackground">#232537</color>
 </resources>

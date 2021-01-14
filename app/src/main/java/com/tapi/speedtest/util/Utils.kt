@@ -2,7 +2,6 @@ package com.tapi.speedtest.util
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.util.Log
 import com.tapi.speedtest.MyApp
 import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.`object`.NetworkTrafficResult
@@ -24,6 +23,20 @@ object Utils {
             listIP.add(IP(it))
         }
         return listIP
+
+    }
+
+    fun convertValue(
+        min1: Float,
+        max1: Float,
+        min2: Float,
+        max2: Float,
+        value: Float
+    ): Float {
+        return ((value - min1) * ((max2 - min2) / (max1 - min1)) + min2)
+    }
+
+    fun checkStyle(i: Int) {
 
     }
 

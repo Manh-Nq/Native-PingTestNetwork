@@ -1,10 +1,11 @@
 package com.tapi.speedtest.speedview.components.indicators
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.BlurMaskFilter
-import android.graphics.Canvas
-import android.graphics.Path
-import android.graphics.RectF
+import android.graphics.*
+import android.util.Log
+import androidx.core.content.ContextCompat
+import com.tapi.speedtest.R
 
 /**
  * this Library build By Anas Altair
@@ -26,23 +27,67 @@ class SpindleIndicator(context: Context) : Indicator<SpindleIndicator>(context) 
         return bottomY
     }
 
-    override fun draw(canvas: Canvas, degree: Float) {
+    @SuppressLint("ResourceAsColor")
+    override fun draw(context: Context, canvas: Canvas, degree: Float) {
+        /**draw indicator**/
         canvas.save()
         canvas.rotate(90f + degree, getCenterX(), getCenterY())
+        /*     indicatorPaint.shader = LinearGradient(
+                 0f,
+                 0f,
+                 0f,
+                 100f,
+                 resources.getColor(R.color.colorGrayCircleSpeedview),
+                 resources.getColor(R.color.colorBlack),
+                 Shader.TileMode.MIRROR
+             )*/
+        setColorArcPaint(context)
         canvas.drawPath(indicatorPath, indicatorPaint)
         canvas.restore()
     }
 
+    private fun setColorArcPaint(context: Context) {
+        val colors = arrayListOf<Int>()
+        colors.add(ContextCompat.getColor(context, R.color.colorBlue))
+        colors.add(0)
+        colors.add(ContextCompat.getColor(context, R.color.colorBlue))
+        val positions = FloatArray(3)
+        positions[0] = 0f
+        positions[1] = 0.2f
+        positions[2] = 0.6f
+        indicatorPaint.shader = SweepGradient(
+            100f,
+            100f,
+            colors.toIntArray(),
+            positions
+        )
+
+        indicatorPaint.style = Paint.Style.FILL
+    }
+
     override fun updateIndicator() {
         indicatorPath.reset()
-        indicatorPath.moveTo(getCenterX(), getViewSize() / 5f + speedometer!!.padding)
-        bottomY = getViewSize() * 3f / 5f + speedometer!!.padding - 70
-        indicatorPath.lineTo(getCenterX() - width, bottomY)
-        indicatorPath.lineTo(getCenterX() + width, bottomY)
-        /*val rectF =
-            RectF(getCenterX() - width, bottomY - width, getCenterX() + width, bottomY + width)
-        indicatorPath.addArc(rectF, 0f, 180f)*/
 
+        val topSharp = getViewSize() / 5f + speedometer!!.padding+50
+        indicatorPath.moveTo(getCenterX(), getCenterY())
+        /**
+         * change position indicator
+         * */
+        val x1 = getCenterX() - width
+        val x2 = getCenterX() - width / 4
+        val x3 = getCenterX() + width / 4
+        val x4 = getCenterX() + width
+
+
+        Log.d(
+            "TAG",
+            "updateIndicator:  getCenterX ${getCenterX()} width ${width}  x1: ${x1} x2 :${x2}   x4 ${x4}  bottomy $bottomY"
+        )
+        indicatorPath.lineTo(x1, getCenterX())
+        indicatorPath.lineTo(x2, topSharp)
+        indicatorPath.lineTo(x3, topSharp)
+        indicatorPath.lineTo(x4, getCenterX())
+        indicatorPath.addCircle(getCenterX(), topSharp, width / 4, Path.Direction.CW)
         indicatorPaint.color = color
     }
 
