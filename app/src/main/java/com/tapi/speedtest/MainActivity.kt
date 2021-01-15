@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
     lateinit var networkEvent: NetworkEvent
     val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private lateinit var binding: ActivityMainBinding
-
+    var count = 0
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,13 +88,14 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
         super.onRunning(percent, report)
         binding.sbPercent.progress = percent.toInt()
         Log.d("nmcode", "[RUNNING]  percent: ${percent}%")
-        Log.d("nmcode", "[RUNNING]  RateBit: ${report.transferRateBit} bit/s")
-        Log.d("nmcode", "[RUNNING]  RateOctet: ${report.transferRateOctet} L")
-        Log.d("nmcode", "[RUNNING]  reportTime: ${report.reportTime}Long")
-        Log.d("nmcode", "[RUNNING]  requestNum: ${report.requestNum} ")
-        Log.d("nmcode", "[RUNNING]  totalPacketSize: ${report.totalPacketSize} L")
-        Log.d("nmcode", "[RUNNING]  temporaryPacketSize: ${report.temporaryPacketSize} L")
-        Log.d("nmcode", "[RUNNING]  startTime: ${report.startTime} L")
+        count++
+        Log.d("count", "[RUNNING]  RateBit: ${report.transferRateBit} bit/s  count  $count")
+        /*       Log.d("nmcode", "[RUNNING]  RateOctet: ${report.transferRateOctet} L")
+               Log.d("nmcode", "[RUNNING]  reportTime: ${report.reportTime}Long")
+               Log.d("nmcode", "[RUNNING]  requestNum: ${report.requestNum} ")
+               Log.d("nmcode", "[RUNNING]  totalPacketSize: ${report.totalPacketSize} L")
+               Log.d("nmcode", "[RUNNING]  temporaryPacketSize: ${report.temporaryPacketSize} L")
+               Log.d("nmcode", "[RUNNING]  startTime: ${report.startTime} L")*/
     }
 
 }

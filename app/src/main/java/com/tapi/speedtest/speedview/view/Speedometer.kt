@@ -14,6 +14,7 @@ import com.tapi.speedtest.R
 import com.tapi.speedtest.speedview.components.indicators.Indicator
 import com.tapi.speedtest.speedview.utils.OnPrintTickLabelListener
 import com.tapi.speedtest.util.Utils
+import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
@@ -273,9 +274,9 @@ abstract class Speedometer @JvmOverloads constructor(
         set(tickNumber) {
             require(tickNumber >= 0) { "tickNumber mustn't be negative" }
             val ticks = ArrayList<Float>()
-            val tickEach = if (tickNumber == 1) 0f else 1f / (tickNumber - 1).toDouble().toFloat()
+            val tickEach = if (tickNumber == 1) 0f else 1f / (tickNumber - 1).toFloat()
             for (i in 0 until tickNumber) {
-                Log.d("TAG", "tickNumber  :tickEach ${tickEach} ${tickEach * i} - $i")
+//                Log.d("TAG", "tickNumber  :tickEach $tickEach ${tickEach * i} - $i  tickNumber$tickNumber")
                 ticks.add(tickEach * i)
             }
 
@@ -579,7 +580,7 @@ abstract class Speedometer @JvmOverloads constructor(
         return (degree - startDegree) * (maxSpeed - minSpeed) / (endDegree - startDegree) + minSpeed
     }
 
-    protected fun getStartDegree(): Int {
+     fun getStartDegree(): Int {
         return startDegree
     }
 
@@ -596,7 +597,7 @@ abstract class Speedometer @JvmOverloads constructor(
         setStartEndDegree(startDegree, endDegree)
     }
 
-    protected fun getEndDegree(): Int {
+     fun getEndDegree(): Int {
         return endDegree
     }
 
@@ -734,10 +735,9 @@ abstract class Speedometer @JvmOverloads constructor(
         textPaint.typeface = typeFace
 
         val range = endDegree - startDegree
-        ticks.forEachIndexed { index, t ->
-
-            Log.d("TAG", "drawTicks: $range  $t")
-            val d = startDegree + range * t
+        ticks.forEachIndexed { index, tickItem ->
+            Log.d("TAG", "drawTicks: $range  tickItem :$tickItem")
+            val d = startDegree + range * tickItem
             canvas.save()
             canvas.rotate(d + 90f, size * .5f, size * .5f)
             if (!tickRotation)
@@ -756,7 +756,6 @@ abstract class Speedometer @JvmOverloads constructor(
                 tick = "%.0f".format(locale, getSpeedAtDegree(d))
 
             canvas.translate(0f, initTickPadding + padding.toFloat() + tickPadding.toFloat())
-
             StaticLayout(
                 tick,
                 textPaint,

@@ -8,6 +8,7 @@ object Constance {
     const val TTL_DEFAULT = "120000"
     const val URI_SPEED_TEST_UPLOAD = "http://ipv4.ikoula.testdebit.info/"
     const val URI_SPEED_TEST_DOWNLOAD_1M = "http://ipv4.ikoula.testdebit.info/1M.iso"
+    const val MAX_ANGLE =260.03552f
 }
 enum class NetWork(var i: Int) {
     TYPE_INTERNET(1),

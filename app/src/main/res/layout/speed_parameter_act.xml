@@ -31,12 +31,7 @@
             app:sv_unit="Mbps/s"
             app:sv_unitTextColor="@color/white" />
 
-                <Button
-                    android:id="@+id/btgo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/sp_rate"
-                    android:layout_centerInParent="true"
-                    android:text="goto" />
+
+
     </RelativeLayout>
 </layout>

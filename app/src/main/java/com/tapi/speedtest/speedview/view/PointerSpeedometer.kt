@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import com.github.anastr.speedviewlib.components.Style
 import com.tapi.speedtest.R
+import com.tapi.speedtest.`object`.Constance
 import com.tapi.speedtest.speedview.components.indicators.SpindleIndicator
 import com.tapi.speedtest.speedview.utils.getRoundAngle
 
@@ -21,7 +22,8 @@ open class PointerSpeedometer @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : Speedometer(context, attrs, defStyleAttr) {
-
+    var roundAngle: Float = 0f
+    private var arcAngle = 0f
     private val mpaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mpaint2: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val speedometerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -34,6 +36,15 @@ open class PointerSpeedometer @JvmOverloads constructor(
     private var pointerColor = 0xFFFFFFFF.toInt()
 
     private var withPointer = true
+    private var isDrawing = false
+
+    fun getArcAngle(): Float {
+        return arcAngle
+    }
+
+    fun setArcAngle(arcAngle: Float) {
+        this.arcAngle = arcAngle
+    }
 
     /**
      * change the color of the center circle.
@@ -135,7 +146,10 @@ open class PointerSpeedometer @JvmOverloads constructor(
         super.onSizeChanged(w, h, oldW, oldH)
 
         val risk = speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat() - 20
+
         speedometerRect.set(risk, risk, size - risk, size - risk)
+
+        Log.d("TAG", "onSizeChanged: $risk   size $size")
 
         updateRadial()
         updateBackgroundBitmap()
@@ -149,67 +163,58 @@ open class PointerSpeedometer @JvmOverloads constructor(
     @SuppressLint("ResourceAsColor", "DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        initDraw()
 
-        val roundAngle = getRoundAngle(speedometerWidth, speedometerRect.width())
+        roundAngle = getRoundAngle(speedometerWidth, speedometerRect.width())
 
         /**
          * draw line border background speed
          * */
+
         canvas.drawArc(
             speedometerRect,
             getStartDegree() + roundAngle,
-            (getEndDegree() - getStartDegree()) - roundAngle * 2f,
+//            (getEndDegree() - getStartDegree()) - roundAngle * 2f,
+            arcAngle,
             false,
             speedometerPaint
         )
-        if (withPointer) {
-            canvas.save()
-            canvas.rotate(90 + degree, size * .5f, size * .5f)
-            /**
-             * draw elevation in Circle on linespeed
-             **/
-            /*  canvas.drawCircle(
-                  size * .5f,
-                  speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat(),
-                  speedometerWidth * .5f + dpTOpx(8f),
-                  pointerBackPaint
-              )*/
+
+        if (arcAngle == Constance.MAX_ANGLE) {
+            initDraw()
+            updateBackgroundBitmap()
+            if (withPointer) {
+                canvas.save()
+                canvas.rotate(90 + degree, size * .5f, size * .5f)
+                canvas.restore()
+            }
+            drawSpeedUnitText(canvas)
+
+
+            val c = centerCircleColor
+            circlePaint.color =
+                Color.argb(
+                    (Color.alpha(c) * .5f).toInt(),
+                    Color.red(c),
+                    Color.green(c),
+                    Color.blue(c)
+                )
 
             /**
-             * draw circle in lineborder
+             * draw circle elevation in center
              **/
-            /*  canvas.drawCircle(
-                  size * .5f,
-                  speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat(),
-                  speedometerWidth * .5f + dpTOpx(1f),
-                  pointerPaint
-              )*/
-
-            canvas.restore()
+            mpaint2.color = ContextCompat.getColor(context, R.color.colorCircleCenterBackround)
+            setColorArcPaint(context)
+            canvas.drawCircle(size * .5f, size * .5f, dpTOpx(65f), mpaint2)
+            circlePaint.color = c
+            /**
+             * draw circle in center
+             **/
+            mpaint.color = Color.WHITE
+            drawIndicator(canvas)
+            canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
+            canvas.drawCircle(size * .5f, size * .5f, dpTOpx(8f), mpaint)
+            drawNotes(canvas)
         }
-        drawSpeedUnitText(canvas)
-
-
-        val c = centerCircleColor
-        circlePaint.color =
-            Color.argb((Color.alpha(c) * .5f).toInt(), Color.red(c), Color.green(c), Color.blue(c))
-
-        /**
-         * draw circle elevation in center
-         **/
-        mpaint2.color = ContextCompat.getColor(context, R.color.colorCircleCenterBackround)
-        setColorArcPaint(context)
-        canvas.drawCircle(size * .5f, size * .5f, dpTOpx(65f), mpaint2)
-        circlePaint.color = c
-        /**
-         * draw circle in center
-         **/
-        mpaint.color = Color.WHITE
-        drawIndicator(canvas)
-        canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
-        canvas.drawCircle(size * .5f, size * .5f, dpTOpx(8f), mpaint)
-        drawNotes(canvas)
     }
 
     private fun setColorArcPaint(context: Context) {
@@ -234,12 +239,16 @@ open class PointerSpeedometer @JvmOverloads constructor(
     override fun updateBackgroundBitmap() {
         val c = createBackgroundBitmapCanvas()
         initDraw()
-        drawMarks(c)
-        Log.d("TAG", "updateBackgroundBitmap: $tickNumber")
-        if (tickNumber > 0)
-            drawTicks(c)
-        else
-            drawDefMinMaxSpeedPosition(c)
+        if(arcAngle==Constance.MAX_ANGLE){
+            drawMarks(c)
+            Log.d("TAG", "updateBackgroundBitmap: $tickNumber")
+            if (tickNumber > 0)
+                drawTicks(c)
+            else
+                drawDefMinMaxSpeedPosition(c)
+        }
+
+
     }
 
     private fun updateSweep(): SweepGradient {
@@ -247,7 +256,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
          * draw rate alpha in line border speed
          * */
         val startColor = Color.argb(
-            150,
+            180,
             Color.red(speedometerColor),
             Color.green(speedometerColor),
             Color.blue(speedometerColor)
@@ -272,6 +281,8 @@ open class PointerSpeedometer @JvmOverloads constructor(
             Color.blue(speedometerColor)
         )
         val position = getOffsetSpeed() * (getEndDegree() - getStartDegree()) / 360f
+
+        Log.d("TAG", "updateSweep:${getOffsetSpeed()} ")
         val c = ContextCompat.getColor(context, R.color.colorLineSpeedMeterbackground)
         val sweepGradient = SweepGradient(
             size * .5f,
