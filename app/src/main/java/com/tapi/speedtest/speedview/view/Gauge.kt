@@ -1,5 +1,7 @@
 package com.tapi.speedtest.speedview.view
 
+import OnSectionChangeListener
+import OnSpeedChangeListener
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
@@ -7,16 +9,14 @@ import android.graphics.*
 import android.os.Build
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import com.github.anastr.speedviewlib.components.Section
 import com.github.anastr.speedviewlib.components.Style
 import com.tapi.speedtest.R
-import com.tapi.speedtest.speedview.utils.OnSectionChangeListener
-import com.tapi.speedtest.speedview.utils.OnSpeedChangeListener
-import com.tapi.speedtest.speedview.utils.doOnSections
+import doOnSections
+
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max

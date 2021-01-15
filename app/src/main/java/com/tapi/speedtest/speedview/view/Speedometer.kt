@@ -1,20 +1,20 @@
 package com.tapi.speedtest.speedview.view
 
+import OnPrintTickLabelListener
 import android.content.Context
 import android.graphics.*
 import android.text.Layout
 import android.text.StaticLayout
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.github.anastr.speedviewlib.components.Style
 import com.github.anastr.speedviewlib.components.indicators.NoIndicator
 import com.github.anastr.speedviewlib.components.note.Note
 import com.tapi.speedtest.R
 import com.tapi.speedtest.speedview.components.indicators.Indicator
-import com.tapi.speedtest.speedview.utils.OnPrintTickLabelListener
-import com.tapi.speedtest.util.Utils
-import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
@@ -87,6 +87,7 @@ abstract class Speedometer @JvmOverloads constructor(
         set(markColor) {
             markPaint.color = markColor
         }
+
     var marksPadding = 0f
         set(marksPadding) {
             field = marksPadding
@@ -478,7 +479,6 @@ abstract class Speedometer @JvmOverloads constructor(
         canvas.save()
         canvas.rotate(90f + getStartDegree(), size * .5f, size * .5f)
         val everyDegree = (getEndDegree() - getStartDegree()) / (50 + 1f)
-        Log.d("TAG", "drawMarks: $everyDegree")
         for (i in 1..68) {
             // draw ratio by degree
             canvas.rotate(everyDegree, size * .5f, size * .5f)
@@ -520,11 +520,7 @@ abstract class Speedometer @JvmOverloads constructor(
         canvas.restore()
     }
 
-    /**
-     * draw Notes,
-     * every Speedometer must call this method at End of it's `onDraw()` method.
-     * @param canvas view canvas to draw notes.
-     */
+
     protected fun drawNotes(canvas: Canvas) {
         for (note in notes) {
             if (note.getPosition() === Note.Position.CenterSpeedometer)
@@ -564,18 +560,11 @@ abstract class Speedometer @JvmOverloads constructor(
         return canvas
     }
 
-    /**
-     * @param speed to know the degree at it.
-     * @return current Degree at that speed.
-     */
+
     protected fun getDegreeAtSpeed(speed: Float): Float {
         return (speed - minSpeed) * (endDegree - startDegree) / (maxSpeed - minSpeed) + startDegree
     }
 
-    /**
-     * @param degree to know the speed at it.
-     * @return current speed at that degree.
-     */
     protected fun getSpeedAtDegree(degree: Float): Float {
         return (degree - startDegree) * (maxSpeed - minSpeed) / (endDegree - startDegree) + minSpeed
     }
@@ -584,15 +573,7 @@ abstract class Speedometer @JvmOverloads constructor(
         return startDegree
     }
 
-    /**
-     * change the start of speedometer (at [minSpeed]).<br></br>
-     * this method will recreate ticks, and if you have set custom tick,
-     * it will be removed, by calling [tickNumber] method.
-     * @param startDegree the start of speedometer.
-     * @throws IllegalArgumentException if `startDegree` negative.
-     * @throws IllegalArgumentException if `startDegree >= endDegree`.
-     * @throws IllegalArgumentException if the difference between `endDegree and startDegree` bigger than 360.
-     */
+
     fun setStartDegree(startDegree: Int) {
         setStartEndDegree(startDegree, endDegree)
     }
@@ -601,29 +582,12 @@ abstract class Speedometer @JvmOverloads constructor(
         return endDegree
     }
 
-    /**
-     * change the end of speedometer (at [maxSpeed]).<br></br>
-     * this method will recreate ticks, and if you have set custom tick,
-     * it will be removed, by calling [tickNumber] method.
-     * @param endDegree the end of speedometer.
-     * @throws IllegalArgumentException if `endDegree` negative.
-     * @throws IllegalArgumentException if `endDegree <= startDegree`.
-     * @throws IllegalArgumentException if the difference between `endDegree and startDegree` bigger than 360.
-     */
+
     fun setEndDegree(endDegree: Int) {
         setStartEndDegree(startDegree, endDegree)
     }
 
-    /**
-     * change start and end of speedometer.<br></br>
-     * this method will recreate ticks, and if you have set custom tick,
-     * it will be removed, by calling [tickNumber] method.
-     * @param startDegree the start of speedometer.
-     * @param endDegree the end of speedometer.
-     * @throws IllegalArgumentException if `startDegree OR endDegree` negative.
-     * @throws IllegalArgumentException if `startDegree >= endDegree`.
-     * @throws IllegalArgumentException if the difference between `endDegree and startDegree` bigger than 360.
-     */
+
     fun setStartEndDegree(startDegree: Int, endDegree: Int) {
         this.startDegree = startDegree
         this.endDegree = endDegree
@@ -636,12 +600,7 @@ abstract class Speedometer @JvmOverloads constructor(
         }
     }
 
-    /**
-     * Display new [Note](https://github.com/anastr/SpeedView/wiki/Notes)
-     * for custom seconds.
-     * @param note to display.
-     * @param showTimeMillisecond time to remove Note, 3 sec by default.
-     */
+
     fun addNote(note: Note<*>, showTimeMillisecond: Long = 3000) {
         note.build(width)
         notes.add(note)
@@ -656,18 +615,12 @@ abstract class Speedometer @JvmOverloads constructor(
         invalidate()
     }
 
-    /**
-     * remove All [Notes](https://github.com/anastr/SpeedView/wiki/Notes).
-     */
     fun removeAllNotes() {
         notes.clear()
         invalidate()
     }
 
-    /**
-     * draw minSpeedText and maxSpeedText at default Position.
-     * @param c canvas to draw.
-     */
+
     protected fun drawDefMinMaxSpeedPosition(c: Canvas) {
         textPaint.textAlign = when {
             startDegree % 360 <= 90 -> Paint.Align.RIGHT
@@ -736,8 +689,8 @@ abstract class Speedometer @JvmOverloads constructor(
 
         val range = endDegree - startDegree
         ticks.forEachIndexed { index, tickItem ->
-            Log.d("TAG", "drawTicks: $range  tickItem :$tickItem")
             val d = startDegree + range * tickItem
+
             canvas.save()
             canvas.rotate(d + 90f, size * .5f, size * .5f)
             if (!tickRotation)
@@ -754,7 +707,7 @@ abstract class Speedometer @JvmOverloads constructor(
             // if (onPrintTickLabel is null or it returns null)
             if (tick == null)
                 tick = "%.0f".format(locale, getSpeedAtDegree(d))
-
+            Log.d("TAG", "drawTicks: $tick")
             canvas.translate(0f, initTickPadding + padding.toFloat() + tickPadding.toFloat())
             StaticLayout(
                 tick,
@@ -771,11 +724,6 @@ abstract class Speedometer @JvmOverloads constructor(
         }
     }
 
-    /**
-     * change [indicator shape](https://github.com/anastr/SpeedView/wiki/Indicators).<br></br>
-     * this method will get bach indicatorColor and indicatorWidth to default.
-     * @param indicator new indicator (Enum value).
-     */
     open fun setIndicator(indicator: Indicator.Indicators) {
         this.indicator = Indicator.createIndicator(context, this, indicator)
     }

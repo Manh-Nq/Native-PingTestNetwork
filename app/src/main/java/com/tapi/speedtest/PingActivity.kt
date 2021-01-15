@@ -1,12 +1,12 @@
 package com.tapi.speedtest
 
+import Utils
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.tapi.speedtest.databinding.ActPingBinding
 import com.tapi.speedtest.manager.vpn.VPNServerChooser
-import com.tapi.speedtest.util.Utils
 import kotlinx.coroutines.*
 
 class PingActivity : AppCompatActivity() {

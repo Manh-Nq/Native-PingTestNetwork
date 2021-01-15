@@ -2,7 +2,7 @@ package com.tapi.speedtest.manager.vpn
 
 import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.database.entity.NetworkTrafficEntity
-import com.tapi.speedtest.util.Utils
+
 
 class VPNServerChooser {
 

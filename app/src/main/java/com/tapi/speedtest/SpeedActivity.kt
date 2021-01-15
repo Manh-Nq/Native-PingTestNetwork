@@ -30,15 +30,15 @@ class SpeedActivity : AppCompatActivity() {
             binding.spRate,
             Constance.MAX_ANGLE
         )
-        animation.duration = 5000
+        animation.duration = 1000
         binding.spRate.startAnimation(animation)
 
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {
-                Log.d("TAG", "AnimationListener  start: ")
             }
 
             override fun onAnimationEnd(animation: Animation?) {
+                binding.spRate.withTremble = true
                 myScope.launch {
                     while (true) {
                         val random = Random.nextInt(61) + 20
@@ -53,7 +53,7 @@ class SpeedActivity : AppCompatActivity() {
             }
 
             override fun onAnimationRepeat(animation: Animation?) {
-                Log.d("TAG", "AnimationListener  repeat: ")
+
             }
 
         })

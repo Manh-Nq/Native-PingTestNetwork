@@ -8,7 +8,7 @@
         android:background="@color/colorBlack">
 
 
-        <com.tapi.speedtest.speedview.view.PointerSpeedometer
+        <com.tapi.speedtest.speedview.view.SpeedometerView
             android:id="@+id/sp_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             app:sv_pointerColor="@color/colorBlue"
             app:sv_marksPadding="50dp"
             app:sv_speedTextColor="@color/white"
-            app:sv_tickNumber="10"
+            app:sv_tickNumber="11"
             app:sv_tickPadding="25dp"
             app:sv_tickRotation="false"
             app:sv_tickTextFormat="INTEGER"

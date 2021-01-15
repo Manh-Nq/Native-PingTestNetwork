@@ -4,20 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.github.anastr.speedviewlib.components.Style
 import com.tapi.speedtest.R
 import com.tapi.speedtest.`object`.Constance
 import com.tapi.speedtest.speedview.components.indicators.SpindleIndicator
-import com.tapi.speedtest.speedview.utils.getRoundAngle
+import getRoundAngle
 
 
 /**
  * this Library build By Anas Altair
  * see it on [GitHub](https://github.com/anastr/SpeedView)
  */
-open class PointerSpeedometer @JvmOverloads constructor(
+open class SpeedometerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -149,7 +148,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
 
         speedometerRect.set(risk, risk, size - risk, size - risk)
 
-        Log.d("TAG", "onSizeChanged: $risk   size $size")
 
         updateRadial()
         updateBackgroundBitmap()
@@ -241,7 +239,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
         initDraw()
         if(arcAngle==Constance.MAX_ANGLE){
             drawMarks(c)
-            Log.d("TAG", "updateBackgroundBitmap: $tickNumber")
             if (tickNumber > 0)
                 drawTicks(c)
             else
@@ -282,7 +279,6 @@ open class PointerSpeedometer @JvmOverloads constructor(
         )
         val position = getOffsetSpeed() * (getEndDegree() - getStartDegree()) / 360f
 
-        Log.d("TAG", "updateSweep:${getOffsetSpeed()} ")
         val c = ContextCompat.getColor(context, R.color.colorLineSpeedMeterbackground)
         val sweepGradient = SweepGradient(
             size * .5f,

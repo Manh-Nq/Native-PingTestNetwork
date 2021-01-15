@@ -1,16 +1,34 @@
-package com.tapi.speedtest.util
-
 import android.content.Context
 import android.net.ConnectivityManager
+import com.github.anastr.speedviewlib.components.Section
 import com.tapi.speedtest.MyApp
 import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.`object`.NetworkTrafficResult
 import com.tapi.speedtest.database.entity.NetworkTrafficEntity
+import com.tapi.speedtest.speedview.view.Gauge
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.util.*
+typealias OnSpeedChangeListener = (gauge: Gauge, isSpeedUp: Boolean, isByTremble: Boolean) -> Unit
+
+typealias OnSectionChangeListener = (previousSection : Section?, newSection : Section?) -> Unit
 
 
+typealias OnPrintTickLabelListener = (tickPosition :Int, tick :Float) -> CharSequence?
+
+
+
+fun Gauge.doOnSections(action: (section: Section) -> Unit) {
+    val sections = ArrayList(this.sections)
+    // this will also clear observers.
+    this.clearSections()
+    sections.forEach { action.invoke(it) }
+    this.addSections(sections)
+}
+
+fun getRoundAngle(a: Float, d: Float): Float {
+    return (a * .5f * 360 / (d  * Math.PI)).toFloat()
+}
 object Utils {
 
     val tmp = mutableListOf(
@@ -23,20 +41,6 @@ object Utils {
             listIP.add(IP(it))
         }
         return listIP
-
-    }
-
-    fun convertValue(
-        min1: Float,
-        max1: Float,
-        min2: Float,
-        max2: Float,
-        value: Float
-    ): Float {
-        return ((value - min1) * ((max2 - min2) / (max1 - min1)) + min2)
-    }
-
-    fun checkStyle(i: Int) {
 
     }
 
