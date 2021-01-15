@@ -24,6 +24,7 @@ class PingActivity : AppCompatActivity() {
 
         vpnChooser = VPNServerChooser()
         binding.btPing.setOnClickListener {
+
             showProgress(true)
             myScope.launch {
                 val rs = vpnChooser.choose(Utils.listServer())

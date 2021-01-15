@@ -10,7 +10,7 @@ class NetworkTraffic {
         val terminal = Terminal()
     }
 
-    suspend fun mesure(listIP: List<IP>): List<NetworkTrafficResult> {
+    suspend fun measure(listIP: List<IP>): List<NetworkTrafficResult> {
         val listNetwork = mutableListOf<NetworkTrafficResult>()
         listIP.forEach {
             val item = terminal.ping(it.address)
@@ -26,7 +26,7 @@ class NetworkTraffic {
 
     }
 
-    suspend fun mesure(dest: IP): NetworkTrafficResult {
+    suspend fun measure(dest: IP): NetworkTrafficResult {
         val item = terminal.ping(dest.address)
         return NetworkTrafficResult(
             Utils.  getIPAddress(true),

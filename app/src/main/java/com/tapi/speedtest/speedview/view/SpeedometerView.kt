@@ -244,8 +244,6 @@ open class SpeedometerView @JvmOverloads constructor(
             else
                 drawDefMinMaxSpeedPosition(c)
         }
-
-
     }
 
     private fun updateSweep(): SweepGradient {

@@ -28,9 +28,27 @@
             app:sv_tickTextFormat="INTEGER"
             app:sv_speedometerColor="@color/colorSpeedMeters"
             app:sv_textColor="@color/white"
+            android:visibility="gone"
             app:sv_unit="Mbps/s"
             app:sv_unitTextColor="@color/white" />
 
+        <Button
+            android:id="@+id/bt_t"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sp_rate"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:text="test" />
+
+        <Button
+            android:id="@+id/bt_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bt_t"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:text="change parameters" />
 
 
     </RelativeLayout>

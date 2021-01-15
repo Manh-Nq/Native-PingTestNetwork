@@ -34,7 +34,7 @@ class VPNServerChooser {
 
 
     private suspend fun scanAndSaveToDB(ip: IP) {
-        val networkTrafficResult = networkTraffic.mesure(ip)
+        val networkTrafficResult = networkTraffic.measure(ip)
         val networkEntity = Utils.parseNetworkTrafficEntity(networkTrafficResult)
         vpnCacher.saveResult(networkEntity)
     }
