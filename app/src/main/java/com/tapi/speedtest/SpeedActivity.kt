@@ -11,13 +11,13 @@ import kotlinx.coroutines.*
 import kotlin.random.Random
 
 class SpeedActivity : AppCompatActivity(), Animation.AnimationListener {
+    private var a: Float = 0f
     private var animation: ArcAngleAnimation? = null
     private var _binding: SpeedParameterActBinding? = null
     val binding get() = _binding!!
     val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-    private var isChange = true
+    private var isChange = 0
     private var isShow = true
-    private var myJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,59 +27,87 @@ class SpeedActivity : AppCompatActivity(), Animation.AnimationListener {
     }
 
     private fun initViews() {
-
         binding.spRate.withTremble = false
-        animation = ArcAngleAnimation(
-            binding.spRate,
-            Constance.MAX_ANGLE
-        )
-        animation?.duration = 1000
-
-        animation?.setAnimationListener(this)
-
-
-        binding.btChange.setOnClickListener {
-            if (isChange) {
-                binding.spRate.maxSpeed = 1000f
-                binding.spRate.unit = "Mb/s"
-            } else {
-                binding.spRate.maxSpeed = 100f
-                binding.spRate.unit = "Mbps/s"
+        binding.btChange100.setOnClickListener {
+            binding.spRate.maxSpeed = 100f
+            binding.spRate.unit = "Mb/s"
+            if (isChange == 1) {
+                a /= 5
             }
-            isChange = !isChange
+            if (isChange == 2) {
+                a /= 10
+            }
+            binding.spRate.speedTo(a, 0)
+            isChange = 0
+        }
+        binding.btChange500.setOnClickListener {
+            binding.spRate.maxSpeed = 500f
+            binding.spRate.unit = "Kb/s"
+            if (isChange == 0) {
+                a *= 5
+            }
+            if (isChange == 2) {
+                a /= 2
+            }
+            binding.spRate.speedTo(a, 0)
+            isChange = 1
+        }
+        binding.btChange1000.setOnClickListener {
+            binding.spRate.maxSpeed = 1000f
+            binding.spRate.unit = "Bit/s"
+            if (isChange == 0) {
+                a *= 5
+            }
+            if (isChange == 1) {
+                a *= 2
+            }
+            binding.spRate.speedTo(a, 0)
+            isChange = 2
         }
 
-        binding.btT.setOnClickListener {
-//            binding.spRate.setArcAngle(0f)
+
+        binding.btTest.setOnClickListener {
             if (isShow) {
+                creatAnimation()
                 binding.spRate.visibility = View.VISIBLE
                 binding.spRate.startAnimation(animation)
             } else {
                 binding.spRate.withTremble = false
                 binding.spRate.visibility = View.GONE
-                myJob?.cancel()
+                animation?.setArcAngle()
+                binding.spRate.resetLayoutView()
             }
             isShow = !isShow
 
-
         }
-    }
 
-    override fun onAnimationStart(animation: Animation?) {
+        binding.btSpeed.setOnClickListener {
+            myScope.launch {
+                a = (Random.nextInt(61) + 20f)
 
-    }
-
-    override fun onAnimationEnd(animation: Animation?) {
-        binding.spRate.withTremble = true
-        myJob = myScope.launch {
-            while (true) {
-                val random = Random.nextInt(61) + 20
-                delay(2500)
                 withContext(Dispatchers.Main) {
-                    binding.spRate.speedTo(random * 1f)
+                    binding.spRate.speedTo(a, 1000)
+                    delay(5000)
+                    binding.spRate.speedTo(0f)
                 }
             }
         }
+        animation?.setAnimationListener(this)
+    }
+
+    private fun creatAnimation() {
+        animation = ArcAngleAnimation(
+            binding.spRate,
+            Constance.MAX_ANGLE
+        )
+        animation?.duration = 1000
+    }
+
+    override fun onAnimationStart(animation: Animation?) {
+    }
+
+    override fun onAnimationEnd(animation: Animation?) {
+        /*binding.spRate.withTremble = true*/
     }
 
     override fun onAnimationRepeat(animation: Animation?) {

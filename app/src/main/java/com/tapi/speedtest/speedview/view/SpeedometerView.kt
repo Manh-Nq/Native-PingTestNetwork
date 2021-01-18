@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.github.anastr.speedviewlib.components.Style
 import com.tapi.speedtest.R
@@ -178,8 +179,7 @@ open class SpeedometerView @JvmOverloads constructor(
         )
 
         if (arcAngle == Constance.MAX_ANGLE) {
-            initDraw()
-            updateBackgroundBitmap()
+
             if (withPointer) {
                 canvas.save()
                 canvas.rotate(90 + degree, size * .5f, size * .5f)
@@ -208,10 +208,13 @@ open class SpeedometerView @JvmOverloads constructor(
              * draw circle in center
              **/
             mpaint.color = Color.WHITE
+            initDraw()
+            updateBackgroundBitmap()
             drawIndicator(canvas)
             canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
             canvas.drawCircle(size * .5f, size * .5f, dpTOpx(8f), mpaint)
-            drawNotes(canvas)
+           drawNotes(canvas)
+
         }
     }
 
@@ -236,15 +239,17 @@ open class SpeedometerView @JvmOverloads constructor(
 
     override fun updateBackgroundBitmap() {
         val c = createBackgroundBitmapCanvas()
-        initDraw()
-        if(arcAngle==Constance.MAX_ANGLE){
+//        Log.d("TAG", "drawTicks: $arcAngle    ${Constance.MAX_ANGLE}")
+        if (arcAngle == Constance.MAX_ANGLE) {
             drawMarks(c)
             if (tickNumber > 0)
                 drawTicks(c)
             else
                 drawDefMinMaxSpeedPosition(c)
         }
+        initDraw()
     }
+
 
     private fun updateSweep(): SweepGradient {
         /**
@@ -277,7 +282,7 @@ open class SpeedometerView @JvmOverloads constructor(
         )
         val position = getOffsetSpeed() * (getEndDegree() - getStartDegree()) / 360f
 
-        val c = ContextCompat.getColor(context, R.color.colorLineSpeedMeterbackground)
+        val colorBackground = ContextCompat.getColor(context, R.color.colorLineSpeedMeterbackground)
         val sweepGradient = SweepGradient(
             size * .5f,
             size * .5f,
@@ -285,7 +290,7 @@ open class SpeedometerView @JvmOverloads constructor(
                 startColor, color2,
                 speedometerColor,
 //                        color3, endColor,        
-                c, c,
+                colorBackground, colorBackground,
                 startColor
             ),
             floatArrayOf(0f, position * .5f, position, position, .99f, 1f)
@@ -341,4 +346,9 @@ open class SpeedometerView @JvmOverloads constructor(
         if (isAttachedToWindow)
             invalidate()
     }
+
+    fun resetLayoutView() {
+        updateBackgroundBitmap()
+    }
+
 }

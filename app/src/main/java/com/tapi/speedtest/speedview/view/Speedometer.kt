@@ -1,14 +1,15 @@
 package com.tapi.speedtest.speedview.view
 
 import OnPrintTickLabelListener
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.text.Layout
 import android.text.StaticLayout
-import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.github.anastr.speedviewlib.components.Style
 import com.github.anastr.speedviewlib.components.indicators.NoIndicator
@@ -20,6 +21,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.text.Typography.degree
+
 
 /**
  * this Library build By Anas Altair
@@ -71,7 +73,7 @@ abstract class Speedometer @JvmOverloads constructor(
                 indicator.updateIndicator()
         }
 
-    private val ratioPath = Path()
+    protected var ratioPath = Path()
     var marksNumber = 0
         set(marksNumber) {
             field = marksNumber
@@ -680,7 +682,37 @@ abstract class Speedometer @JvmOverloads constructor(
      * draw speed value at each tick point.
      * @param canvas canvas to draw.
      */
+    @SuppressLint("ObjectAnimatorBinding")
     protected fun drawTicks(canvas: Canvas) {
+/*
+        ObjectAnimator.ofFloat(textPaint, "color", 1.0f, 0.0f).apply {
+            duration = 100
+            object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    drawTextTicks(canvas)
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+
+                }
+
+                override fun onAnimationRepeat(animation: Animator?) {
+
+                }
+
+            }
+            start()
+        }*/
+        drawTextTicks(canvas)
+
+    }
+
+    private fun drawTextTicks(canvas: Canvas) {
+
         if (ticks.size == 0)
             return
 
@@ -689,27 +721,32 @@ abstract class Speedometer @JvmOverloads constructor(
 
         val range = endDegree - startDegree
         ticks.forEachIndexed { index, tickItem ->
-            val d = startDegree + range * tickItem
+
+            val angle = startDegree + range * tickItem
 
             canvas.save()
-            canvas.rotate(d + 90f, size * .5f, size * .5f)
+            canvas.rotate(angle + 90f, size * .5f, size * .5f)
             if (!tickRotation)
                 canvas.rotate(
-                    -(d + 90f),
+                    -(angle + 90f),
                     size * .5f,
                     initTickPadding + textPaint.textSize + padding.toFloat() + tickPadding.toFloat()
                 )
 
             var tick: CharSequence? = null
             if (onPrintTickLabel != null)
-                tick = onPrintTickLabel!!.invoke(index, getSpeedAtDegree(d))
+                tick = onPrintTickLabel!!.invoke(index, getSpeedAtDegree(angle))
 
             // if (onPrintTickLabel is null or it returns null)
             if (tick == null)
-                tick = "%.0f".format(locale, getSpeedAtDegree(d))
+                tick = "%.0f".format(locale, getSpeedAtDegree(angle))
             Log.d("TAG", "drawTicks: $tick")
-            canvas.translate(0f, initTickPadding + padding.toFloat() + tickPadding.toFloat())
-            StaticLayout(
+            canvas.translate(
+                0f,
+                initTickPadding + padding.toFloat() + tickPadding.toFloat()
+            )
+
+            val layoutDraw = StaticLayout(
                 tick,
                 textPaint,
                 size,
@@ -718,8 +755,8 @@ abstract class Speedometer @JvmOverloads constructor(
                 0f,
                 false
             )
-                .draw(canvas)
 
+            layoutDraw.draw(canvas)
             canvas.restore()
         }
     }
