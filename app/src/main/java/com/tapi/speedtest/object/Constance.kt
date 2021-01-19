@@ -1,6 +1,7 @@
 package com.tapi.speedtest.`object`
 
 object Constance {
+    const val MAX_ALPHA=255
     const val MAX_MARKS = 68
     const val TIME_CONFIG = 30 * 60 * 1000L
     const val REQUEST_TIME_OUT = "Request timed out"

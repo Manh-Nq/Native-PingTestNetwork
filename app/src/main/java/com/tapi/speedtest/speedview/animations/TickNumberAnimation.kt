@@ -11,7 +11,7 @@ class TickNumberAnimation(val arcView: SpeedometerView, val speedometer: Speedom
         arcView.invalidateGauge()
 
         for (index in 0..speedometer.tickNumber) {
-            delay(100)
+            delay(50)
             speedometer.endTickPosition = index
             arcView.setRatioAlpha(((index.toFloat() / speedometer.tickNumber) * 255).toInt())
             arcView.invalidateGauge()

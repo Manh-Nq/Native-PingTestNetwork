@@ -95,7 +95,7 @@ abstract class Gauge constructor(
      * @see currentSpeed
      */
     var speed = minSpeed
-        private set
+         set
 
     /**
      * what is speed now in **integer**.
@@ -116,7 +116,7 @@ abstract class Gauge constructor(
      * @see speed
      */
     var currentSpeed = minSpeed
-        private set
+         set
 
     /**
      * given a state of the speed change if it's increase or decrease.

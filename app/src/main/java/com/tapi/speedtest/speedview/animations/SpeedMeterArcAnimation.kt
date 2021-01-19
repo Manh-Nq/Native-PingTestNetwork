@@ -16,7 +16,7 @@ class SpeedMeterArcAnimation(val arcView: SpeedometerView) {
         animation?.cancel()
         animation = ValueAnimator.ofFloat(fromAngle, toAngle)
         animation?.apply {
-            duration = 1000
+            duration = 500
             addUpdateListener {
                 if (!isCanceled) {
                     val currValue = it.animatedValue as Float

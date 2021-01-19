@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import com.github.anastr.speedviewlib.components.Style
 import com.tapi.speedtest.R
 import com.tapi.speedtest.`object`.Constance
-import com.tapi.speedtest.speedview.animations.AlphaAnimation
 import com.tapi.speedtest.speedview.animations.SpeedMeterArcAnimation
 import com.tapi.speedtest.speedview.animations.TickNumberAnimation
 import com.tapi.speedtest.speedview.components.indicators.SpindleIndicator
@@ -43,14 +42,13 @@ open class SpeedometerView @JvmOverloads constructor(
     private var withPointer = true
     private var speedMeterArcAnimation: SpeedMeterArcAnimation? = null
     private val tickNumberAnimation = TickNumberAnimation(this, this)
-    private val alphaAnimation = AlphaAnimation(this)
 
     /**
      * change the color of the center circle.
      */
 
 
-    private var ratioAlpha = 0
+     var ratioAlpha = 0
 
     var centerCircleColor: Int
         get() = circlePaint.color
@@ -96,6 +94,7 @@ open class SpeedometerView @JvmOverloads constructor(
         this.sweepAngle = sweepAngle
     }
 
+    @JvmName("setRatioAlpha1")
     fun setRatioAlpha(alpha: Int) {
         Log.d("TAG", "setAlphaCircle: $alpha")
         this.ratioAlpha = alpha
@@ -353,17 +352,13 @@ open class SpeedometerView @JvmOverloads constructor(
             invalidate()
     }
 
-    fun resetLayoutView() {
-        updateBackgroundBitmap()
-    }
-
     suspend fun start() = coroutineScope {
 //        delay(200)
         tickNumberAnimation.resetView()
         speedMeterArcAnimation?.cancel()
         speedMeterArcAnimation = SpeedMeterArcAnimation(this@SpeedometerView)
         speedMeterArcAnimation?.start(0f, Constance.MAX_ANGLE)
-        delay(1100)
+        delay(510)
 
         tickNumberAnimation.start()
 
