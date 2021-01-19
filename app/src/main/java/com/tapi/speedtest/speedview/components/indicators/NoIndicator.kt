@@ -10,7 +10,7 @@ import com.tapi.speedtest.speedview.components.indicators.Indicator
  */
 class NoIndicator(context: Context) : Indicator<NoIndicator>(context) {
 
-    override fun draw(resources: Context, canvas: Canvas, degree: Float) {}
+    override fun draw( canvas: Canvas, degree: Float) {}
 
     override fun updateIndicator() {}
 

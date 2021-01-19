@@ -9,8 +9,13 @@ import androidx.core.content.ContextCompat
 import com.github.anastr.speedviewlib.components.Style
 import com.tapi.speedtest.R
 import com.tapi.speedtest.`object`.Constance
+import com.tapi.speedtest.speedview.animations.AlphaAnimation
+import com.tapi.speedtest.speedview.animations.SpeedMeterArcAnimation
+import com.tapi.speedtest.speedview.animations.TickNumberAnimation
 import com.tapi.speedtest.speedview.components.indicators.SpindleIndicator
 import getRoundAngle
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 
 
 /**
@@ -23,7 +28,6 @@ open class SpeedometerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : Speedometer(context, attrs, defStyleAttr) {
     var roundAngle: Float = 0f
-    private var arcAngle = 0f
     private val mpaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mpaint2: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val speedometerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -34,21 +38,20 @@ open class SpeedometerView @JvmOverloads constructor(
 
     private var speedometerColor = 0xFFEEEEEE.toInt()
     private var pointerColor = 0xFFFFFFFF.toInt()
+    private var sweepAngle = 0f
 
     private var withPointer = true
-    private var isDrawing = false
-
-    fun getArcAngle(): Float {
-        return arcAngle
-    }
-
-    fun setArcAngle(arcAngle: Float) {
-        this.arcAngle = arcAngle
-    }
+    private var speedMeterArcAnimation: SpeedMeterArcAnimation? = null
+    private val tickNumberAnimation = TickNumberAnimation(this, this)
+    private val alphaAnimation = AlphaAnimation(this)
 
     /**
      * change the color of the center circle.
      */
+
+
+    private var ratioAlpha = 0
+
     var centerCircleColor: Int
         get() = circlePaint.color
         set(centerCircleColor) {
@@ -88,6 +91,17 @@ open class SpeedometerView @JvmOverloads constructor(
         initAttributeSet(context, attrs)
     }
 
+
+    fun setSweepAngle(sweepAngle: Float) {
+        this.sweepAngle = sweepAngle
+    }
+
+    fun setRatioAlpha(alpha: Int) {
+        Log.d("TAG", "setAlphaCircle: $alpha")
+        this.ratioAlpha = alpha
+    }
+
+
     override fun defaultGaugeValues() {
         super.speedometerWidth = dpTOpx(10f)
         super.textColor = 0xFFFFFFFF.toInt()
@@ -113,6 +127,7 @@ open class SpeedometerView @JvmOverloads constructor(
     }
 
     private fun init() {
+        indicator.indicatorPaint.alpha = 0
         speedometerPaint.style = Paint.Style.STROKE
         speedometerPaint.strokeCap = Paint.Cap.ROUND
         circlePaint.color = 0xFFFFFFFF.toInt()
@@ -172,51 +187,45 @@ open class SpeedometerView @JvmOverloads constructor(
         canvas.drawArc(
             speedometerRect,
             getStartDegree() + roundAngle,
-//            (getEndDegree() - getStartDegree()) - roundAngle * 2f,
-            arcAngle,
+            sweepAngle,
             false,
             speedometerPaint
         )
 
-        if (arcAngle == Constance.MAX_ANGLE) {
+        val c = centerCircleColor
+        circlePaint.color =
+            Color.argb(
+                (Color.alpha(c) * .5f).toInt(),
+                Color.red(c),
+                Color.green(c),
+                Color.blue(c)
+            )
+        speedUnitTextBitmapPaint.alpha = ratioAlpha
 
-            if (withPointer) {
-                canvas.save()
-                canvas.rotate(90 + degree, size * .5f, size * .5f)
-                canvas.restore()
-            }
-            drawSpeedUnitText(canvas)
+        drawSpeedUnitText(canvas)
 
+        /**
+         * draw circle elevation in center
+         **/
 
-            val c = centerCircleColor
-            circlePaint.color =
-                Color.argb(
-                    (Color.alpha(c) * .5f).toInt(),
-                    Color.red(c),
-                    Color.green(c),
-                    Color.blue(c)
-                )
-
-            /**
-             * draw circle elevation in center
-             **/
-            mpaint2.color = ContextCompat.getColor(context, R.color.colorCircleCenterBackround)
-            setColorArcPaint(context)
-            canvas.drawCircle(size * .5f, size * .5f, dpTOpx(65f), mpaint2)
-            circlePaint.color = c
-            /**
-             * draw circle in center
-             **/
-            mpaint.color = Color.WHITE
-            initDraw()
-            updateBackgroundBitmap()
-            drawIndicator(canvas)
-            canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
-            canvas.drawCircle(size * .5f, size * .5f, dpTOpx(8f), mpaint)
-           drawNotes(canvas)
-
-        }
+        mpaint2.color = ContextCompat.getColor(context, R.color.colorCircleCenterBackround)
+        setColorArcPaint(context)
+        canvas.drawCircle(size * .5f, size * .5f, dpTOpx(65f), mpaint2)
+        circlePaint.color = c
+        /**
+         * draw circle in center
+         **/
+        mpaint.color = Color.WHITE
+        initDraw()
+        mpaint.alpha = ratioAlpha
+        circlePaint.alpha = ratioAlpha
+        indicator.indicatorPaint.alpha = ratioAlpha
+        drawIndicator(canvas)
+        canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
+        canvas.drawCircle(size * .5f, size * .5f, dpTOpx(8f), mpaint)
+        drawNotes(canvas)
     }
+
 
     private fun setColorArcPaint(context: Context) {
         val colors = arrayListOf<Int>()
@@ -233,21 +242,18 @@ open class SpeedometerView @JvmOverloads constructor(
             colors.toIntArray(),
             positions
         )
-
+        mpaint2.alpha = ratioAlpha
+        Log.d("TAG", "setAlphaCircle: alphaDegree: $ratioAlpha  mpaint2.alpha: ${mpaint2.alpha}")
         mpaint2.style = Paint.Style.FILL
     }
 
     override fun updateBackgroundBitmap() {
         val c = createBackgroundBitmapCanvas()
-//        Log.d("TAG", "drawTicks: $arcAngle    ${Constance.MAX_ANGLE}")
-        if (arcAngle == Constance.MAX_ANGLE) {
-            drawMarks(c)
-            if (tickNumber > 0)
-                drawTicks(c)
-            else
-                drawDefMinMaxSpeedPosition(c)
-        }
         initDraw()
+        //drawMarks(c)
+        if (tickNumber > 0) {
+            drawTicks(c)
+        } else drawDefMinMaxSpeedPosition(c)
     }
 
 
@@ -350,5 +356,19 @@ open class SpeedometerView @JvmOverloads constructor(
     fun resetLayoutView() {
         updateBackgroundBitmap()
     }
+
+    suspend fun start() = coroutineScope {
+//        delay(200)
+        tickNumberAnimation.resetView()
+        speedMeterArcAnimation?.cancel()
+        speedMeterArcAnimation = SpeedMeterArcAnimation(this@SpeedometerView)
+        speedMeterArcAnimation?.start(0f, Constance.MAX_ANGLE)
+        delay(1100)
+
+        tickNumberAnimation.start()
+
+        invalidateGauge()
+    }
+
 
 }

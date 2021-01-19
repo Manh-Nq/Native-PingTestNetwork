@@ -1,8 +1,6 @@
 package com.tapi.speedtest.speedview.view
 
 import OnPrintTickLabelListener
-import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
@@ -15,6 +13,7 @@ import com.github.anastr.speedviewlib.components.Style
 import com.github.anastr.speedviewlib.components.indicators.NoIndicator
 import com.github.anastr.speedviewlib.components.note.Note
 import com.tapi.speedtest.R
+import com.tapi.speedtest.`object`.Constance
 import com.tapi.speedtest.speedview.components.indicators.Indicator
 import java.util.*
 import kotlin.math.abs
@@ -38,6 +37,13 @@ abstract class Speedometer @JvmOverloads constructor(
      *
      * add custom [indicator](https://github.com/anastr/SpeedView/wiki/Indicators).
      */
+
+    var endTickPosition: Int = -1
+        set(value) {
+            field = min(ticks.size - 1, value)
+        }
+
+
     var indicator: Indicator<*> = NoIndicator(context)
         set(indicator) {
             field.deleteObservers()
@@ -481,7 +487,7 @@ abstract class Speedometer @JvmOverloads constructor(
         canvas.save()
         canvas.rotate(90f + getStartDegree(), size * .5f, size * .5f)
         val everyDegree = (getEndDegree() - getStartDegree()) / (50 + 1f)
-        for (i in 1..68) {
+        for (i in 1..Constance.MAX_MARKS) {
             // draw ratio by degree
             canvas.rotate(everyDegree, size * .5f, size * .5f)
             canvas.drawPath(ratioPath, markPaint)
@@ -497,7 +503,7 @@ abstract class Speedometer @JvmOverloads constructor(
     protected fun drawIndicator(canvas: Canvas) {
         if (isWithIndicatorLight)
             drawIndicatorLight(canvas)
-        indicator.draw(context, canvas, degree)
+        indicator.draw(canvas, degree)
     }
 
     protected fun drawIndicatorLight(canvas: Canvas) {
@@ -684,34 +690,6 @@ abstract class Speedometer @JvmOverloads constructor(
      */
     @SuppressLint("ObjectAnimatorBinding")
     protected fun drawTicks(canvas: Canvas) {
-/*
-        ObjectAnimator.ofFloat(textPaint, "color", 1.0f, 0.0f).apply {
-            duration = 100
-            object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator?) {
-
-                }
-
-                override fun onAnimationEnd(animation: Animator?) {
-                    drawTextTicks(canvas)
-                }
-
-                override fun onAnimationCancel(animation: Animator?) {
-
-                }
-
-                override fun onAnimationRepeat(animation: Animator?) {
-
-                }
-
-            }
-            start()
-        }*/
-        drawTextTicks(canvas)
-
-    }
-
-    private fun drawTextTicks(canvas: Canvas) {
 
         if (ticks.size == 0)
             return
@@ -721,9 +699,10 @@ abstract class Speedometer @JvmOverloads constructor(
 
         val range = endDegree - startDegree
         ticks.forEachIndexed { index, tickItem ->
-
+            if (index > endTickPosition) {
+                return
+            }
             val angle = startDegree + range * tickItem
-
             canvas.save()
             canvas.rotate(angle + 90f, size * .5f, size * .5f)
             if (!tickRotation)
@@ -760,6 +739,7 @@ abstract class Speedometer @JvmOverloads constructor(
             canvas.restore()
         }
     }
+
 
     open fun setIndicator(indicator: Indicator.Indicators) {
         this.indicator = Indicator.createIndicator(context, this, indicator)

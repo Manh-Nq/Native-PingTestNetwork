@@ -30,7 +30,7 @@ abstract class Gauge constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr), Observer {
 
-    private val speedUnitTextBitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    protected val speedUnitTextBitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     protected var textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
     private val speedTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
     private val unitTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)

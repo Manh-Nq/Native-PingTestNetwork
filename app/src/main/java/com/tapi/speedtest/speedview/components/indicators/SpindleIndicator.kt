@@ -11,7 +11,7 @@ import com.tapi.speedtest.R
  * this Library build By Anas Altair
  * see it on [GitHub](https://github.com/anastr/SpeedView)
  */
-class SpindleIndicator(context: Context) : Indicator<SpindleIndicator>(context) {
+class SpindleIndicator(val context: Context) : Indicator<SpindleIndicator>(context) {
     private val indicatorPath = Path()
     private var bottomY: Float = 0.toFloat()
 
@@ -28,19 +28,10 @@ class SpindleIndicator(context: Context) : Indicator<SpindleIndicator>(context) 
     }
 
     @SuppressLint("ResourceAsColor")
-    override fun draw(context: Context, canvas: Canvas, degree: Float) {
+    override fun draw(canvas: Canvas, degree: Float) {
         /**draw indicator**/
         canvas.save()
         canvas.rotate(90f + degree, getCenterX(), getCenterY())
-        /*     indicatorPaint.shader = LinearGradient(
-                 0f,
-                 0f,
-                 0f,
-                 100f,
-                 resources.getColor(R.color.colorGrayCircleSpeedview),
-                 resources.getColor(R.color.colorBlack),
-                 Shader.TileMode.MIRROR
-             )*/
         setColorArcPaint(context)
         canvas.drawPath(indicatorPath, indicatorPaint)
         canvas.restore()

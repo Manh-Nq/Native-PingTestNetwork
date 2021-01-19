@@ -14,7 +14,7 @@ import java.util.*
 @Suppress("UNCHECKED_CAST")
 abstract class Indicator<out I : Indicator<I>>(context: Context) : Observable() {
 
-    protected var indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+     var indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val density: Float = context.resources.displayMetrics.density
 
     protected var speedometer: Speedometer? = null
@@ -73,7 +73,7 @@ abstract class Indicator<out I : Indicator<I>>(context: Context) : Observable() 
         indicatorPaint.color = color
     }
 
-    abstract fun draw(resources: Context, canvas: Canvas, degree: Float)
+    abstract fun draw(canvas: Canvas, degree: Float)
 
     /**
      * called when size change or color, width.

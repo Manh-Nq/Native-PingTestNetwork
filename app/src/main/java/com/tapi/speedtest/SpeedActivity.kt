@@ -2,17 +2,15 @@ package com.tapi.speedtest
 
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
-import com.tapi.speedtest.`object`.Constance
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.tapi.speedtest.databinding.SpeedParameterActBinding
-import com.tapi.speedtest.speedview.anim.ArcAngleAnimation
 import kotlinx.coroutines.*
 import kotlin.random.Random
 
-class SpeedActivity : AppCompatActivity(), Animation.AnimationListener {
+class SpeedActivity : AppCompatActivity() {
     private var a: Float = 0f
-    private var animation: ArcAngleAnimation? = null
     private var _binding: SpeedParameterActBinding? = null
     val binding get() = _binding!!
     val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -68,13 +66,14 @@ class SpeedActivity : AppCompatActivity(), Animation.AnimationListener {
 
         binding.btTest.setOnClickListener {
             if (isShow) {
-                creatAnimation()
                 binding.spRate.visibility = View.VISIBLE
-                binding.spRate.startAnimation(animation)
+                lifecycleScope.launchWhenResumed {
+                    binding.spRate.start()
+                }
             } else {
+                binding.spRate.setRatioAlpha(0)
                 binding.spRate.withTremble = false
                 binding.spRate.visibility = View.GONE
-                animation?.setArcAngle()
                 binding.spRate.resetLayoutView()
             }
             isShow = !isShow
@@ -84,7 +83,6 @@ class SpeedActivity : AppCompatActivity(), Animation.AnimationListener {
         binding.btSpeed.setOnClickListener {
             myScope.launch {
                 a = (Random.nextInt(61) + 20f)
-
                 withContext(Dispatchers.Main) {
                     binding.spRate.speedTo(a, 1000)
                     delay(5000)
@@ -92,27 +90,9 @@ class SpeedActivity : AppCompatActivity(), Animation.AnimationListener {
                 }
             }
         }
-        animation?.setAnimationListener(this)
     }
 
-    private fun creatAnimation() {
-        animation = ArcAngleAnimation(
-            binding.spRate,
-            Constance.MAX_ANGLE
-        )
-        animation?.duration = 1000
-    }
 
-    override fun onAnimationStart(animation: Animation?) {
-    }
-
-    override fun onAnimationEnd(animation: Animation?) {
-        /*binding.spRate.withTremble = true*/
-    }
-
-    override fun onAnimationRepeat(animation: Animation?) {
-
-    }
 
 
 }

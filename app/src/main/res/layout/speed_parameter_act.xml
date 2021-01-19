@@ -30,7 +30,6 @@
             app:sv_tickTextFormat="INTEGER"
             app:sv_speedometerColor="@color/colorSpeedMeters"
             app:sv_textColor="@color/white"
-            android:visibility="gone"
             app:sv_unit="Mbps/s"
             app:sv_unitTextColor="@color/white" />
 
