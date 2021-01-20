@@ -1,4 +1,4 @@
-package com.tapi.speedtest.speedview.view
+package com.tapi.speedtest.ui.speedview.view
 
 import OnPrintTickLabelListener
 import android.annotation.SuppressLint
@@ -14,7 +14,7 @@ import com.github.anastr.speedviewlib.components.indicators.NoIndicator
 import com.github.anastr.speedviewlib.components.note.Note
 import com.tapi.speedtest.R
 import com.tapi.speedtest.`object`.Constance
-import com.tapi.speedtest.speedview.components.indicators.Indicator
+import com.tapi.speedtest.ui.speedview.components.indicators.Indicator
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max

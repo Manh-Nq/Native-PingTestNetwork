@@ -9,7 +9,7 @@
         android:background="@color/colorBlack">
 
 
-        <com.tapi.speedtest.speedview.view.SpeedometerView
+        <com.tapi.speedtest.ui.speedview.view.SpeedometerView
             android:id="@+id/sp_rate"
             android:layout_width="wrap_content"
             android:layout_marginTop="20dp"

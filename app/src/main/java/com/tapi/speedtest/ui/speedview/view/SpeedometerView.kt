@@ -1,4 +1,4 @@
-package com.tapi.speedtest.speedview.view
+package com.tapi.speedtest.ui.speedview.view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,9 +9,9 @@ import androidx.core.content.ContextCompat
 import com.github.anastr.speedviewlib.components.Style
 import com.tapi.speedtest.R
 import com.tapi.speedtest.`object`.Constance
-import com.tapi.speedtest.speedview.animations.SpeedMeterArcAnimation
-import com.tapi.speedtest.speedview.animations.TickNumberAnimation
-import com.tapi.speedtest.speedview.components.indicators.SpindleIndicator
+import com.tapi.speedtest.ui.speedview.animations.SpeedMeterArcAnimation
+import com.tapi.speedtest.ui.speedview.animations.TickNumberAnimation
+import com.tapi.speedtest.ui.speedview.components.indicators.SpindleIndicator
 import getRoundAngle
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay

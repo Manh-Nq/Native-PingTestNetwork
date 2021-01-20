@@ -17,4 +17,8 @@
     <color name="colorMarks">#ACA5A5</color>
     <color name="colorSpeedMeters">#08A7AE</color>
     <color name="colorLineSpeedMeterbackground">#232537</color>
+    <color name="colorProgress1">#FFC876</color>
+    <color name="colorProgress2">#1BD4E0</color>
+    <color name="colorProgress11">#00FFC876</color>
+    <color name="colorProgress21">#0047ABB1</color>
 </resources>

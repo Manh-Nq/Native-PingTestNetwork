@@ -2,7 +2,7 @@ package com.github.anastr.speedviewlib.components
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.tapi.speedtest.speedview.view.Gauge
+import com.tapi.speedtest.ui.speedview.view.Gauge
 
 /**
  * Created by Anas Altair on 10/25/2019.

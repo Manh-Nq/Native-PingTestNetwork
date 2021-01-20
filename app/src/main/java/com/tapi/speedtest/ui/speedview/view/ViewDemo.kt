@@ -1,4 +1,4 @@
-package com.tapi.speedtest.speedview.view
+package com.tapi.speedtest.ui.speedview.view
 
 import android.annotation.SuppressLint
 import android.content.Context

@@ -1,10 +1,10 @@
-package com.tapi.speedtest.speedview.components.indicators
+package com.tapi.speedtest.ui.speedview.components.indicators
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import com.github.anastr.speedviewlib.components.indicators.*
-import com.tapi.speedtest.speedview.view.Speedometer
+import com.tapi.speedtest.ui.speedview.view.Speedometer
 import java.util.*
 
 /**

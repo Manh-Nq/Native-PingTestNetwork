@@ -1,7 +1,7 @@
-package com.tapi.speedtest.speedview.animations
+package com.tapi.speedtest.ui.speedview.animations
 
-import com.tapi.speedtest.speedview.view.Speedometer
-import com.tapi.speedtest.speedview.view.SpeedometerView
+import com.tapi.speedtest.ui.speedview.view.Speedometer
+import com.tapi.speedtest.ui.speedview.view.SpeedometerView
 import kotlinx.coroutines.delay
 
 class TickNumberAnimation(val arcView: SpeedometerView, val speedometer: Speedometer) {

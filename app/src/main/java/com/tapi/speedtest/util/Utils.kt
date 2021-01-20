@@ -1,11 +1,12 @@
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.Log
 import com.github.anastr.speedviewlib.components.Section
 import com.tapi.speedtest.MyApp
 import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.`object`.NetworkTrafficResult
 import com.tapi.speedtest.database.entity.NetworkTrafficEntity
-import com.tapi.speedtest.speedview.view.Gauge
+import com.tapi.speedtest.ui.speedview.view.Gauge
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.util.*
@@ -16,6 +17,10 @@ typealias OnSectionChangeListener = (previousSection : Section?, newSection : Se
 
 typealias OnPrintTickLabelListener = (tickPosition :Int, tick :Float) -> CharSequence?
 
+fun log(text:String) {
+    Log.d("TAG", "nmCodeCustomview :  $text ")
+
+}
 
 
 fun Gauge.doOnSections(action: (section: Section) -> Unit) {

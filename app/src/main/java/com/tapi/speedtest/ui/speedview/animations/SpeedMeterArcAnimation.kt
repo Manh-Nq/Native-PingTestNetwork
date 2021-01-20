@@ -1,8 +1,8 @@
-package com.tapi.speedtest.speedview.animations
+package com.tapi.speedtest.ui.speedview.animations
 
 import android.animation.ValueAnimator
 import com.tapi.speedtest.`object`.Constance
-import com.tapi.speedtest.speedview.view.SpeedometerView
+import com.tapi.speedtest.ui.speedview.view.SpeedometerView
 
 class SpeedMeterArcAnimation(val arcView: SpeedometerView) {
     private var animation: ValueAnimator? = null

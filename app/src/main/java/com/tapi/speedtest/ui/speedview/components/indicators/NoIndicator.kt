@@ -2,7 +2,7 @@ package com.github.anastr.speedviewlib.components.indicators
 
 import android.content.Context
 import android.graphics.Canvas
-import com.tapi.speedtest.speedview.components.indicators.Indicator
+import com.tapi.speedtest.ui.speedview.components.indicators.Indicator
 
 /**
  * this Library build By Anas Altair
