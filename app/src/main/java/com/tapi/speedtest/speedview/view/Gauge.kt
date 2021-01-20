@@ -9,6 +9,7 @@ import android.graphics.*
 import android.os.Build
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
@@ -95,7 +96,7 @@ abstract class Gauge constructor(
      * @see currentSpeed
      */
     var speed = minSpeed
-         set
+        private set
 
     /**
      * what is speed now in **integer**.
@@ -850,7 +851,6 @@ abstract class Gauge constructor(
         if (newSpeed == this.speed)
             return
         this.speed = newSpeed
-
         isSpeedIncrease = newSpeed > currentSpeed
 
         cancelSpeedAnimator()

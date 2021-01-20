@@ -359,8 +359,16 @@ open class SpeedometerView @JvmOverloads constructor(
         speedMeterArcAnimation = SpeedMeterArcAnimation(this@SpeedometerView)
         speedMeterArcAnimation?.start(0f, Constance.MAX_ANGLE)
         delay(510)
-
         tickNumberAnimation.start()
+        invalidateGauge()
+    }
+
+    suspend fun startFlash() = coroutineScope {
+        speedMeterArcAnimation?.cancel()
+        speedMeterArcAnimation = SpeedMeterArcAnimation(this@SpeedometerView)
+        speedMeterArcAnimation?.startFlash()
+        delay(20)
+        tickNumberAnimation.startFlash()
 
         invalidateGauge()
     }

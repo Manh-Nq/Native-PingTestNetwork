@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/speed_navigation"
+    app:startDestination="@id/frgSpeed">
+
+    <fragment
+        android:id="@+id/frgSpeed"
+        android:name="com.tapi.speedtest.functions.FrgSpeed"
+        android:label="fragment_frg_speed"
+        tools:layout="@layout/fragment_frg_speed">
+        <action
+            android:id="@+id/action_frgSpeed_to_frgNext"
+            app:destination="@id/frgNext" />
+    </fragment>
+    <fragment
+        android:id="@+id/frgNext"
+        android:name="com.tapi.speedtest.functions.FrgNext"
+        android:label="fragment_frg_next"
+        tools:layout="@layout/fragment_frg_next">
+        <action
+            android:id="@+id/action_frgNext_to_frgSpeed"
+            app:destination="@id/frgSpeed"
+            app:popUpTo="@id/frgSpeed"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

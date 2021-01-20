@@ -18,6 +18,13 @@ class TickNumberAnimation(val arcView: SpeedometerView, val speedometer: Speedom
         }
     }
 
+    suspend fun startFlash() {
+//        isCanceled = false
+        speedometer.endTickPosition = speedometer.tickNumber
+        arcView.setRatioAlpha(255)
+        arcView.invalidateGauge()
+    }
+
     fun resetView() {
         speedometer.endTickPosition = -1
         arcView.invalidateGauge()

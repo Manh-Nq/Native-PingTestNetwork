@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBlack">
+
+
+        <com.tapi.speedtest.speedview.view.SpeedometerView
+            android:id="@+id/sp_rate"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            app:sv_backgroundCircleColor="@color/whitealpha"
+            app:sv_centerCircleColor="@color/colorGrayCircleSpeedview"
+            app:sv_indicatorWidth="5dp"
+            app:sv_markColor="@color/colorMarks"
+            app:sv_markWidth="1dp"
+            app:sv_marksPadding="50dp"
+            app:sv_pointerColor="@color/colorBlue"
+            app:sv_speedTextColor="@color/white"
+            app:sv_speedometerColor="@color/colorSpeedMeters"
+            app:sv_speedometerWidth="20dp"
+            app:sv_textColor="@color/white"
+            app:sv_tickNumber="11"
+            app:sv_tickPadding="25dp"
+            app:sv_tickRotation="false"
+            app:sv_tickTextFormat="INTEGER"
+            app:sv_unit="Mbps/s"
+            app:sv_unitTextColor="@color/white" />
+
+        <Button
+            android:id="@+id/bt_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sp_rate"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:text="test" />
+
+        <Button
+            android:id="@+id/bt_change_100"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bt_test"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="5dp"
+            android:text="100" />
+
+        <Button
+            android:id="@+id/bt_change_500"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bt_test"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:text="500" />
+
+
+        <Button
+            android:id="@+id/bt_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bt_change_100"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:text="speed" />
+
+        <Button
+            android:id="@+id/bt_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bt_speed"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:text="next" />
+
+
+    </RelativeLayout>
+</layout>

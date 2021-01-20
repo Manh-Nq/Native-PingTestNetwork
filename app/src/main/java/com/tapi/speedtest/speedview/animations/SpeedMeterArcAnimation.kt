@@ -1,6 +1,7 @@
 package com.tapi.speedtest.speedview.animations
 
 import android.animation.ValueAnimator
+import com.tapi.speedtest.`object`.Constance
 import com.tapi.speedtest.speedview.view.SpeedometerView
 
 class SpeedMeterArcAnimation(val arcView: SpeedometerView) {
@@ -27,4 +28,11 @@ class SpeedMeterArcAnimation(val arcView: SpeedometerView) {
             start()
         }
     }
+
+    fun startFlash() {
+        isCanceled = false
+        arcView.setSweepAngle(Constance.MAX_ANGLE)
+        arcView.invalidate()
+    }
+
 }
