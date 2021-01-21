@@ -2,7 +2,6 @@ package com.tapi.speedtest.ui.connectview
 
 import android.animation.ValueAnimator
 import android.graphics.*
-import android.util.Log
 import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
 import com.tapi.speedtest.R
@@ -14,7 +13,7 @@ class BorderDrawer(val connectView: ConnectView) {
     private val mLeftCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mRightCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    private val drawingRect = RectF(0f, 0f, 0f, 0f)
+     val drawingRect = RectF(0f, 0f, 0f, 0f)
     private val borderRect = RectF(0f, 0f, 0f, 0f)
     private val startLeftAngle = 270f
     private var startRightAngle = 90f
@@ -32,6 +31,7 @@ class BorderDrawer(val connectView: ConnectView) {
         mRightCirclePaint.style = Paint.Style.FILL
 
     }
+
 
     fun onSizeChanged() {
         drawingRect.left = connectView.paddingLeft.toFloat()
@@ -89,10 +89,9 @@ class BorderDrawer(val connectView: ConnectView) {
         mRotationAnimation?.apply {
             repeatCount = ValueAnimator.INFINITE
             interpolator = LinearInterpolator()
-            duration = 1000
+            duration = 2000
             addUpdateListener {
                 canvasRotateValue = it.animatedValue as Float
-                Log.d("taihhh", "canvasRotateValue: ${canvasRotateValue}")
                 connectView.invalidate()
             }
             start()
@@ -123,6 +122,6 @@ class BorderDrawer(val connectView: ConnectView) {
     }
 
     fun onRelease() {
-
+        mRotationAnimation?.cancel()
     }
 }

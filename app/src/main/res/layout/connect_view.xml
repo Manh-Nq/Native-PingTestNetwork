@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBlack"
     android:gravity="center"
     android:orientation="vertical">
 
     <com.tapi.speedtest.ui.connectview.ConnectView
-        android:layout_width="300dp"
+        android:layout_width="200dp"
         android:id="@+id/pg_view"
-        android:layout_height="300dp" />
+        android:layout_height="200dp" />
 
 </LinearLayout>
