@@ -1,4 +1,4 @@
-package com.tapi.speedtest.functions
+package com.tapi.speedtest.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -29,7 +29,7 @@ class FrgSpeed : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFrgSpeedBinding.inflate(layoutInflater)
-        showSpeedDometers()
+//        showSpeedDometers()
         initViews()
         return binding.root
     }
@@ -86,9 +86,6 @@ class FrgSpeed : Fragment() {
 
                 }
             }
-        }
-        binding.btNext.setOnClickListener {
-            findNavController().navigate(R.id.action_frgSpeed_to_frgNext)
         }
 
     }

@@ -1,15 +1,16 @@
-package com.tapi.speedtest
+package com.tapi.speedtest.fragments
 
-
-import android.os.Build
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.tapi.speedtest.R
 import com.tapi.speedtest.`object`.Constance
-import com.tapi.speedtest.databinding.ActivityMainBinding
+import com.tapi.speedtest.databinding.FragmentUploadFrgBinding
 import com.tapi.speedtest.manager.speedtest.NetworkEvent
 import fr.bmartel.speedtest.SpeedTestReport
 import fr.bmartel.speedtest.SpeedTestSocket
@@ -17,22 +18,27 @@ import fr.bmartel.speedtest.model.SpeedTestError
 import kotlinx.coroutines.*
 import java.math.RoundingMode
 
-class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
+
+class UploadFrg : Fragment(), NetworkEvent.NetworkListener {
+
+    var _binding: FragmentUploadFrgBinding? = null
+    val binding get() = _binding!!
 
     lateinit var spt: SpeedTestSocket
-    lateinit var listUpload: MutableList<Double>
     lateinit var networkEvent: NetworkEvent
     val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-    private lateinit var binding: ActivityMainBinding
-    var count = 0
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        listUpload = mutableListOf()
+        _binding = FragmentUploadFrgBinding.inflate(inflater, container, false)
+        initViews()
+        // Inflate the layout for this fragment
+        return binding.root
+    }
 
+    private fun initViews() {
         spt = SpeedTestSocket()
         networkEvent = NetworkEvent(this)
 
@@ -41,6 +47,7 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
 
 
         binding.btDownload.setOnClickListener {
+            showProgress(true)
             myScope.launch {
                 spt.startDownload(Constance.URI_SPEED_TEST_DOWNLOAD_1M)
 
@@ -55,8 +62,6 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
                 spt.startUpload(Constance.URI_SPEED_TEST_UPLOAD, 1000000)
             }
         }
-
-
     }
 
     private fun showProgress(b: Boolean) {
@@ -67,15 +72,16 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
         }
     }
 
-    private fun showToast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-    }
-
+    @SuppressLint("SetTextI18n")
     override fun onSuccess(report: SpeedTestReport) {
         super.onSuccess(report)
         MainScope().launch {
+            binding.tvResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorRed))
+            binding.tvResult.text =
+                " ${report.transferRateBit} octet/s \n  ${report.transferRateOctet} bit/s"
             showProgress(false)
         }
+
         Log.e("nmcode", "[SUCCESS]  RateBit: ${report.transferRateBit} octet/s")
         Log.e("nmcode", "[SUCCESS]  RateOctet: ${report.transferRateOctet} bit/s")
     }
@@ -88,8 +94,7 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
         super.onRunning(percent, report)
         binding.sbPercent.progress = percent.toInt()
         Log.d("nmcode", "[RUNNING]  percent: ${percent}%")
-        count++
-        Log.d("count", "[RUNNING]  RateBit: ${report.transferRateBit} bit/s  count  $count")
+
         /*       Log.d("nmcode", "[RUNNING]  RateOctet: ${report.transferRateOctet} L")
                Log.d("nmcode", "[RUNNING]  reportTime: ${report.reportTime}Long")
                Log.d("nmcode", "[RUNNING]  requestNum: ${report.requestNum} ")
@@ -97,5 +102,6 @@ class MainActivity : AppCompatActivity(), NetworkEvent.NetworkListener {
                Log.d("nmcode", "[RUNNING]  temporaryPacketSize: ${report.temporaryPacketSize} L")
                Log.d("nmcode", "[RUNNING]  startTime: ${report.startTime} L")*/
     }
+
 
 }

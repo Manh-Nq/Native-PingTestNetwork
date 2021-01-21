@@ -30,6 +30,7 @@
             app:sv_tickNumber="11"
             app:sv_tickPadding="25dp"
             app:sv_tickRotation="false"
+            android:visibility="gone"
             app:sv_tickTextFormat="INTEGER"
             app:sv_unit="Mbps/s"
             app:sv_unitTextColor="@color/white" />
@@ -70,16 +71,6 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="5dp"
             android:text="speed" />
-
-        <Button
-            android:id="@+id/bt_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/bt_speed"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="5dp"
-            android:text="next" />
-
 
     </RelativeLayout>
 </layout>

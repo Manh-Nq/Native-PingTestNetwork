@@ -3,26 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/speed_navigation"
-    app:startDestination="@id/frgSpeed">
+    app:startDestination="@id/frgMain">
 
     <fragment
         android:id="@+id/frgSpeed"
-        android:name="com.tapi.speedtest.functions.FrgSpeed"
+        android:name="com.tapi.speedtest.fragments.FrgSpeed"
         android:label="fragment_frg_speed"
-        tools:layout="@layout/fragment_frg_speed">
-        <action
-            android:id="@+id/action_frgSpeed_to_frgNext"
-            app:destination="@id/frgNext" />
-    </fragment>
+        tools:layout="@layout/fragment_frg_speed"/>
     <fragment
         android:id="@+id/frgNext"
-        android:name="com.tapi.speedtest.functions.FrgNext"
+        android:name="com.tapi.speedtest.fragments.FrgNext"
         android:label="fragment_frg_next"
-        tools:layout="@layout/fragment_frg_next">
+        tools:layout="@layout/fragment_frg_next"/>
+    <fragment
+        android:id="@+id/frgMain"
+        android:name="com.tapi.speedtest.fragments.FrgMain"
+        android:label="fragment_frg_main"
+        tools:layout="@layout/fragment_frg_main" >
         <action
-            android:id="@+id/action_frgNext_to_frgSpeed"
-            app:destination="@id/frgSpeed"
-            app:popUpTo="@id/frgSpeed"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_frgMain_to_frgSpeed"
+            app:destination="@id/frgSpeed" />
+        <action
+            android:id="@+id/action_frgMain_to_frgNext"
+            app:destination="@id/frgNext" />
+        <action
+            android:id="@+id/action_frgMain_to_frgPing"
+            app:destination="@id/frgPing" />
+        <action
+            android:id="@+id/action_frgMain_to_uploadFrg"
+            app:destination="@id/uploadFrg" />
+        <action
+            android:id="@+id/action_frgMain_to_frgSpeedLinev"
+            app:destination="@id/frgSpeedLinev" />
     </fragment>
+    <fragment
+        android:id="@+id/frgPing"
+        android:name="com.tapi.speedtest.fragments.FrgPing"
+        android:label="fragment_frg_ping"
+        tools:layout="@layout/fragment_frg_ping" />
+    <fragment
+        android:id="@+id/uploadFrg"
+        android:name="com.tapi.speedtest.fragments.UploadFrg"
+        android:label="fragment_upload_frg"
+        tools:layout="@layout/fragment_upload_frg" />
+    <fragment
+        android:id="@+id/frgSpeedLinev"
+        android:name="com.tapi.speedtest.fragments.FrgSpeedLinev"
+        android:label="fragment_frg_speed_linev"
+        tools:layout="@layout/fragment_frg_speed_linev" />
 </navigation>

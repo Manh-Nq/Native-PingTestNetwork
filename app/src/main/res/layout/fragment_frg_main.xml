@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".FrgMain">
+
+        <Button
+            android:id="@+id/bt_sp_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Speed view" />
+
+        <Button
+            android:id="@+id/bt_connect_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bt_sp_view"
+            android:layout_centerInParent="true"
+            android:text="Connectview" />
+
+        <Button
+            android:id="@+id/bt_ping"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bt_connect_view"
+            android:layout_centerInParent="true"
+            android:text="Test Ping" />
+
+        <Button
+            android:id="@+id/bt_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bt_ping"
+            android:layout_centerInParent="true"
+            android:text="test upload" />
+
+        <Button
+            android:id="@+id/bt_line_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bt_upload"
+            android:layout_centerInParent="true"
+            android:text="Line SpeedView" />
+
+    </RelativeLayout>
+</layout>

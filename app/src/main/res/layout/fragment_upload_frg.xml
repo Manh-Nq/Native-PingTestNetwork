@@ -17,16 +17,9 @@
             android:id="@+id/sb_percent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/bt_get"
+            android:layout_below="@id/edt_ip"
             android:layout_marginTop="20dp"
             android:max="100" />
-
-
-        <Button
-            android:id="@+id/bt_ping"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="Ping" />
 
 
         <Button
@@ -45,13 +38,6 @@
             android:layout_toRightOf="@id/bt_upload"
             android:text="download" />
 
-        <Button
-            android:id="@+id/bt_get"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/tv_result"
-            android:text="get" />
-
 
         <EditText
             android:id="@+id/edt_ip"
@@ -65,9 +51,9 @@
             android:id="@+id/tv_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edt_ip"
+            android:layout_below="@id/sb_percent"
             android:layout_centerInParent="true"
-            android:textColor="@color/colorBlue"
+            android:textColor="@color/colorRed"
             android:textSize="15dp" />
 
 

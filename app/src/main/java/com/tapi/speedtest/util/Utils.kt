@@ -100,9 +100,6 @@ object Utils {
         return ""
     }
 
-    fun <T : Boolean> getBl(): T {
-        return false as T
-    }
 
     fun parseNetworkTrafficEntity(networkTrafficResult: NetworkTrafficResult): NetworkTrafficEntity {
         val networkTrafficEntity = NetworkTrafficEntity()

@@ -1,23 +1,31 @@
-package com.tapi.speedtest
+package com.tapi.speedtest.fragments
 
 import Utils
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import com.tapi.speedtest.databinding.ActPingBinding
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.tapi.speedtest.databinding.FragmentFrgPingBinding
 import com.tapi.speedtest.manager.vpn.VPNServerChooser
 import kotlinx.coroutines.*
 
-class PingActivity : AppCompatActivity() {
-    private lateinit var binding: ActPingBinding
-    val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+class FrgPing : Fragment() {
+
+    var _binding: FragmentFrgPingBinding? = null
+    val binding get() = _binding!!
     lateinit var vpnChooser: VPNServerChooser
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActPingBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+
+        _binding = FragmentFrgPingBinding.inflate(inflater, container, false)
         initViews()
+        return binding.root
     }
 
     private fun initViews() {
@@ -30,6 +38,7 @@ class PingActivity : AppCompatActivity() {
                 val rs = vpnChooser.choose(Utils.listServer())
                 withContext(Dispatchers.Main) {
                     showProgress(false)
+                    binding.tvResult.text = rs.address
                     Log.d("nmcode", "NManhhh:IP perfect ${rs.address}")
                 }
             }
@@ -51,6 +60,5 @@ class PingActivity : AppCompatActivity() {
             binding.prg.visibility = View.INVISIBLE
         }
     }
-
 
 }

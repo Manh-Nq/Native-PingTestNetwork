@@ -11,7 +11,7 @@ import java.io.InputStreamReader
 
 class Terminal {
 
- private   fun pingCMD(str: String): ICMPReply {
+ private fun pingCMD(str: String): ICMPReply {
         var icmpReply: ICMPReply
         var result: String
         try {
@@ -51,7 +51,7 @@ class Terminal {
                     }
                 }
                 executeCmd.destroy()
-//                Log.d("TAG", "NManhhh: $result")
+                Log.d("TAG", "NManhhh: $result")
                 icmpReply = if (result.contains("time=")) {
                     parseICMPPackets(result, isRequest)
                 } else {
