@@ -10,14 +10,17 @@ import com.tapi.speedtest.ui.speedview.view.Gauge
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.util.*
+import kotlin.math.pow
+import kotlin.math.sqrt
+
 typealias OnSpeedChangeListener = (gauge: Gauge, isSpeedUp: Boolean, isByTremble: Boolean) -> Unit
 
-typealias OnSectionChangeListener = (previousSection : Section?, newSection : Section?) -> Unit
+typealias OnSectionChangeListener = (previousSection: Section?, newSection: Section?) -> Unit
 
 
-typealias OnPrintTickLabelListener = (tickPosition :Int, tick :Float) -> CharSequence?
+typealias OnPrintTickLabelListener = (tickPosition: Int, tick: Float) -> CharSequence?
 
-fun log(text:String) {
+fun log(text: String) {
     Log.d("TAG", "nmCodeCustomview :  $text ")
 
 }
@@ -108,6 +111,14 @@ object Utils {
         networkTrafficEntity.duration = networkTrafficResult.duration
         networkTrafficEntity.validateThreshold = System.currentTimeMillis()
         return networkTrafficEntity
+    }
+
+
+    fun getDistance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
+        return sqrt(
+            ((x2.toDouble() - x1.toDouble()).pow(2.0) + (x2.toDouble() - x1.toDouble()).pow(2.0))
+        ).toFloat()
+
     }
 
 }
