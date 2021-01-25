@@ -37,12 +37,12 @@ class FrgSpeedLinev : Fragment() {
                     binding.lineview.startDraw(it.x, it.y)
                 }
             }*/
-           /* for (item in 0..100) {
+            for (item in 1..20) {
                 delay(200)
                 withContext(Dispatchers.Main) {
                     binding.lineview.startDraw(item.toFloat())
                 }
-            }*/
+            }
         }
     }
 

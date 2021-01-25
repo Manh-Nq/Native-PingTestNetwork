@@ -1,10 +1,12 @@
 import android.content.Context
+import android.graphics.PointF
 import android.net.ConnectivityManager
 import android.util.Log
 import com.github.anastr.speedviewlib.components.Section
 import com.tapi.speedtest.MyApp
 import com.tapi.speedtest.`object`.IP
 import com.tapi.speedtest.`object`.NetworkTrafficResult
+import com.tapi.speedtest.`object`.Vector
 import com.tapi.speedtest.database.entity.NetworkTrafficEntity
 import com.tapi.speedtest.ui.speedview.view.Gauge
 import java.net.InetAddress
@@ -121,4 +123,37 @@ object Utils {
 
     }
 
+    fun findYCoordinatis(oldPoint: PointF, newPoint: PointF, xPos: Float): Float {
+        //directionVector
+//        val directionVector = Vector(p2.x - p1.x, p2.y - p1.y)
+
+        //normalVector
+        val normalVector = Vector(x = oldPoint.y - newPoint.y, y = newPoint.x - oldPoint.x)
+
+        return if (((oldPoint.y - newPoint.y).toDouble()
+                .pow(2) + (newPoint.x - oldPoint.x).toDouble()
+                .pow(2)) > 0
+        ) {
+            (((normalVector.x * oldPoint.x) + (normalVector.y * oldPoint.y)) - (normalVector.x * xPos)) / normalVector.y
+        } else
+            -1f
+    }
+
+    fun findXCoordinatis(oldPoint: PointF, newPoint: PointF, yPos: Float): Float {
+        //directionVector
+//        val directionVector = Vector(p2.x - p1.x, p2.y - p1.y)
+
+        //normalVector
+        val normalVector = Vector(x = oldPoint.y - newPoint.y, y = newPoint.x - oldPoint.x)
+
+        return if (((oldPoint.y - newPoint.y).toDouble()
+                .pow(2) + (newPoint.x - oldPoint.x).toDouble()
+                .pow(2)) > 0
+        ) {
+            (((normalVector.x * oldPoint.x) + (normalVector.y * oldPoint.y)) - (normalVector.y * yPos)) / normalVector.x
+        } else {
+            -1f
+        }
+
+    }
 }
