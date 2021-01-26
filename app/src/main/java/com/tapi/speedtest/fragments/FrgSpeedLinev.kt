@@ -1,19 +1,18 @@
 package com.tapi.speedtest.fragments
 
+import android.graphics.PointF
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.jjoe64.graphview.series.DataPoint
-import com.jjoe64.graphview.series.LineGraphSeries
+import com.tapi.speedtest.`object`.Constance
 import com.tapi.speedtest.databinding.FragmentFrgSpeedLinevBinding
 import kotlinx.coroutines.*
 
 
 class FrgSpeedLinev : Fragment() {
 
-    private var series: LineGraphSeries<DataPoint>? = null
     var _binding: FragmentFrgSpeedLinevBinding? = null
     val binding get() = _binding!!
     val myScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -31,18 +30,19 @@ class FrgSpeedLinev : Fragment() {
     private fun initViews() {
 
         myScope.launch {
-            /*Constance.LIST_ANGLE.forEach {
-                delay(200)
-                withContext(Dispatchers.Main) {
-                    binding.lineview.startDraw(it.x, it.y)
-                }
-            }*/
-            for (item in 1..20) {
-                delay(200)
-                withContext(Dispatchers.Main) {
-                    binding.lineview.startDraw(item.toFloat())
-                }
+            binding.lineview.post {
+                binding.lineview.init()
             }
+
+              for (item in 1..1000) {
+                  delay(5)
+                  withContext(Dispatchers.Main) {
+                      val rd = (1..100).random()
+                      val point = PointF(item.toFloat(), rd.toFloat())
+                      binding.lineview.startDraw(point, 10)
+                  }
+              }
+
         }
     }
 
