@@ -23,28 +23,6 @@ object Constance {
         0.86f, 0.85f, 0.84f, 0.83f, 0.82f,
         0.81f, 0.8f, 0.79f
     )
-    val LIST_ANGLE = mutableListOf(
-        MyPoint(0f, 100f),
-        MyPoint(20f, 100f),
-        MyPoint(30f, 100f),
-        MyPoint(50f, 60f),
-        MyPoint(60f, 100f),
-        MyPoint(70f, 60f),
-        MyPoint(80f, 80f),
-        MyPoint(100f, 60f),
-        MyPoint(120f, 30f),
-        MyPoint(200f, 80f),
-        MyPoint(400f, 100f),
-        MyPoint(500f, 100f),
-        MyPoint(600f, 200f),
-        MyPoint(700f, 100f),
-        MyPoint(800f, 60f),
-        MyPoint(900f, 100f),
-        MyPoint(920f, 60f),
-        MyPoint(1000f, 100f),
-        MyPoint(1080f, 20f)
-    )
-
 }
 enum class NetWork(var i: Int) {
     TYPE_INTERNET(1),

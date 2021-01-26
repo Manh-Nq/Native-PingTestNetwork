@@ -6,7 +6,7 @@
         android:background="@color/colorBlack"
         android:layout_height="match_parent">
 
-        <com.tapi.speedtest.ui.linespeedview.LineSpeedView
+        <com.tapi.speedtest.ui.linespeedview.LineCharView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/lineview"

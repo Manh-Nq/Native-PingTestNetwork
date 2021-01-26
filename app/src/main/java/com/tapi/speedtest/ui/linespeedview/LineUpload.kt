@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import com.tapi.speedtest.R
 
-class LineDownload(val lineView: LineCharView) {
+class LineUpload(val lineSpeedView: LineCharView) {
 
     val TAG = LineDownload::class.java.name
     private var newPoint = PointF(0f, 0f)
@@ -27,13 +27,13 @@ class LineDownload(val lineView: LineCharView) {
     var mHeight = 0f
 
     private val mPaintPath = Paint().apply {
-        color = Color.parseColor("#F44336")
+        color = Color.GREEN
         style = Paint.Style.STROKE
         strokeWidth = 4f
         isAntiAlias = true
     }
     private val mPaintPathPrev = Paint().apply {
-        color = Color.GREEN
+        color = Color.parseColor("#F44336")
         style = Paint.Style.STROKE
         strokeWidth = 4f
         isAntiAlias = true
@@ -48,12 +48,12 @@ class LineDownload(val lineView: LineCharView) {
 
     fun init() {
         mPathRunning.moveTo(newPoint.x, newPoint.y)
-        mPathPrev.moveTo(0f, mHeight)
+        mPathPrev.moveTo(newPointPrev.x, newPointPrev.y)
     }
 
     fun onSizeChange() {
-        mWidth = lineView.width.toFloat()
-        mHeight = lineView.height.toFloat()
+        mWidth = lineSpeedView.width.toFloat()
+        mHeight = lineSpeedView.height.toFloat()
     }
 
     fun onDraw(canvas: Canvas) {
@@ -76,16 +76,17 @@ class LineDownload(val lineView: LineCharView) {
         if (listPoints.size % ratio == 0) {
             optimalDrawLineSpeed()
         }
-//        if (isMaxPointChange) {
-//            mPathRunning.reset()
-//            mPathRunning.moveTo(newPoint.x, newPoint.y)
-//            for (index in listPoints) {
-//                drawLineSpeed(index.x, index.y, percent)
-//            }
-//            isMaxPointChange = false
-//        } else {
+        if (isMaxPointChange) {
+            mPathRunning.reset()
+            mPathRunning.moveTo(newPoint.x, newPoint.y)
+            for (index in listPoints) {
+                drawLineSpeed(index.x, point.y, percent)
+//                optimalDrawLineSpeed()
+            }
+            isMaxPointChange = false
+        } else {
             drawLineSpeed(point.x, point.y, percent)
-//        }
+        }
     }
 
     private fun optimalDrawLineSpeed() {
@@ -93,7 +94,6 @@ class LineDownload(val lineView: LineCharView) {
         mPathRunning.reset()
         mPathRunning.moveTo(newPoint.x, newPointPrev.y)
         oldPointPrev = PointF(newPointPrev.x, newPointPrev.y)
-
         listPoints.forEach { point ->
             sumY += point.y
         }
@@ -101,6 +101,7 @@ class LineDownload(val lineView: LineCharView) {
         val yPos =
             mHeight - Utils.convertValue(0f, maxSpeed, 0f, mHeight * 1f, (sumY / listPoints.size))
         newPointPrev = PointF(xPos, yPos)
+
         newMiddlePointPrev = PointF(
             (newPointPrev.x - oldPointPrev.x) / 5 + oldPointPrev.x,
             Utils.findYCoordinatis(
@@ -109,6 +110,7 @@ class LineDownload(val lineView: LineCharView) {
                 (newPointPrev.x - oldPointPrev.x) / 5 + oldPointPrev.x
             )
         )
+
         mPathPrev.cubicTo(
             oldMiddlePointPrev.x,
             oldMiddlePointPrev.y,
@@ -118,7 +120,7 @@ class LineDownload(val lineView: LineCharView) {
             newMiddlePointPrev.y
         )
         oldMiddlePointPrev = PointF(newMiddlePointPrev.x, newMiddlePointPrev.y)
-        lineView.invalidate()
+        lineSpeedView.invalidate()
     }
 
     private fun drawLineSpeed(xPos: Float, yPos: Float, percent: Float) {
@@ -131,20 +133,22 @@ class LineDownload(val lineView: LineCharView) {
             TAG,
             "  drawLineSpeed: newPoint $newPoint - yposition $yPos  - maxSpeed $maxSpeed  mHeight $mHeight"
         )
-        mPathRunning.lineTo(newPoint.x, newPoint.y)
-        lineView.invalidate()
+        mPathRunning.lineTo(
+            newPoint.x, newPoint.y
+        )
+        lineSpeedView.invalidate()
     }
 
     private fun checkMaxPoints(data: Float): Float {
         if (maxSpeed < data) {
-//            isMaxPointChange = true
+            isMaxPointChange = true
             return data
         }
         return maxSpeed
     }
 
     fun setColorPath() {
-        mPaintPath.color = ContextCompat.getColor(lineView.context, R.color.whitealpha)
+        mPaintPath.color = ContextCompat.getColor(lineSpeedView.context, R.color.whitealpha)
     }
 
 
